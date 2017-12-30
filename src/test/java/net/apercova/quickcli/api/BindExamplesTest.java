@@ -1,4 +1,4 @@
-package net.percova.console.cli.api;
+package net.apercova.quickcli.api;
 
 import static org.junit.Assert.assertTrue;
 
