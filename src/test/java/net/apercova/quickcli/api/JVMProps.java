@@ -1,4 +1,4 @@
-package net.percova.console.cli.api;
+package net.apercova.quickcli.api;
 
 import net.apercova.quickcli.api.BaseActionCommand;
 import net.apercova.quickcli.api.CLIArgument;
