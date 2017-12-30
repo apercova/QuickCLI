@@ -1,4 +1,4 @@
-package net.percova.console.cli.api;
+package net.apercova.quickcli.api;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
