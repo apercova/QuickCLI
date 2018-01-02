@@ -12,6 +12,9 @@ import java.nio.charset.Charset;
 public class SimpleCharsetConverter implements DatatypeConverter<Charset> {
 
 	public Charset parse(String value) throws DatatypeConverterException { 
+		if(value == null|| value.isEmpty()) {
+			return Charset.defaultCharset();
+		}
 		
 		try {
 			return Charset.forName(value);
