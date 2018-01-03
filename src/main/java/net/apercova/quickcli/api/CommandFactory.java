@@ -18,7 +18,19 @@ import java.util.Map;
  *
  */
 public class CommandFactory {
-		
+	
+	protected static final String ARG_REQUIRED = "Argument %s is required.";
+	protected static final String ARG_NOT_VALID = "%s is not a valid argument.";
+	protected static final String NUM_ARG_NOT_VALID = "Argument %s is not valid. %s is not a valid number for type: %s %n";
+	protected static final String TYPE_NOT_VALID = "Type %s is not a valid command type.";
+	protected static final String VALUE_CONV_ERROR = "Value conversion error for argument %s. value: %s %n";
+	protected static final String PROP_NAME ="name";
+	protected static final String PROP_DESCRIPTION ="description";
+	
+	private CommandFactory() {
+		super();
+	}
+	
 	/**
 	 * Creates a command of the provided {@link Class} type
 	 * @param <T> Generic command type
@@ -39,10 +51,14 @@ public class CommandFactory {
 					verify(command);
 				}
 			}else {
-				throw new CLIArgumentException(String.format("Type %s is not a valid command type.", clazz));
+				throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz));
 			}
-		} catch (ReflectiveOperationException e) {
-			throw new CLIArgumentException(String.format("Type %s is not a valid command type.", clazz), e);
+		} catch (IllegalAccessException e) {
+			throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz), e);
+		} catch (NoSuchFieldException e) {
+			throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz), e);
+		} catch (InstantiationException e) {
+			throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz), e);
 		}
 
 		return command;
@@ -71,43 +87,47 @@ public class CommandFactory {
 					lookArg = false;
 					alias = arg;
 					field = getAnnotatedField(argMap.get(arg), command);
-					field.setAccessible(true);
-					if(boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
-						parseValue(argMap.get(arg), field, String.valueOf(Boolean.TRUE), command);							
-						lookArg = true;
-						alias = null;
-						
-					} else if(!argMap.get(arg).required()) {
-						if((i+1)< argSet.size() && !isArgument( argSet.get((i+1)) , argMap)) {
-							parseValue(argMap.get(arg), field, argSet.get((i+1)), command);
-							i++;
+					if(field != null) {
+						field.setAccessible(true);
+						if(boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
+							parseValue(argMap.get(arg), field, String.valueOf(Boolean.TRUE), command);							
+							lookArg = true;
+							alias = null;
 							
-						}else {		
-							parseValue(argMap.get(arg), field, argMap.get(arg).value(), command);
+						} else if(!argMap.get(arg).required()) {
+							if((i+1)< argSet.size() && !isArgument( argSet.get((i+1)) , argMap)) {
+								parseValue(argMap.get(arg), field, argSet.get((i+1)), command);
+								i++;
+								
+							}else {		
+								parseValue(argMap.get(arg), field, argMap.get(arg).value(), command);
 
+							}
+							lookArg = true;
+							alias = null;
+						}else {
+							if((i+1)>= argSet.size()) {
+								throw new IllegalArgumentException(
+										String.format(ARG_REQUIRED, alias));
+							}						
 						}
-						lookArg = true;
-						alias = null;
-					}else {
-						if((i+1)>= argSet.size()) {
-							throw new IllegalArgumentException(
-									String.format("Argument %s is required.", alias));
-						}						
 					}
 				}else {
 					throw new IllegalArgumentException(
-							String.format("%s is not a valid argument.", arg));
+							String.format(ARG_NOT_VALID, arg));
 				}
 			}else {
 				if(!isArgument(arg, argMap)) {
 					field = getAnnotatedField(argMap.get(alias), command);
-					field.setAccessible(true);
-					parseValue(argMap.get(alias), field, arg, command);
-					lookArg = true;
-					alias = null;
+					if(field != null) {
+						field.setAccessible(true);
+						parseValue(argMap.get(alias), field, arg, command);
+						lookArg = true;
+						alias = null;
+					}
 				} else {
 					throw new IllegalArgumentException(
-							String.format("Argument %s is required.", alias));
+							String.format(ARG_REQUIRED, alias));
 				}
 			}	
 		}
@@ -131,11 +151,11 @@ public class CommandFactory {
 			throws CLIArgumentException, IllegalAccessException, InstantiationException{
 		try {
 			Class<? extends DatatypeConverter<?>> converterClass = converter.value();
-			Object converter_ = converterClass.newInstance();
-			field.set(command, converterClass.cast(converter_).parse(value));
+			Object converterImpl = converterClass.newInstance();
+			field.set(command, converterClass.cast(converterImpl).parse(value));
 		} catch (DatatypeConverterException e) {
 			throw new CLIArgumentException(
-					String.format("Value conversion error for argument %s. value: %s %n", arg.name(), value), e);
+					String.format(VALUE_CONV_ERROR, arg.name(), value), e);
 		}
 	}
 	
@@ -185,7 +205,7 @@ public class CommandFactory {
 			}
 		} catch (NumberFormatException e) {
 			throw new CLIArgumentException(
-					String.format("Argument %s is not valid. %s is not a valid number for type: %s %n", arg.name(), value, field.getType().getName()), e);
+					String.format(NUM_ARG_NOT_VALID, arg.name(), value, field.getType().getName()), e);
 		}
 
 		
@@ -206,17 +226,19 @@ public class CommandFactory {
 						parseValue(arg, f, arg.value() , command);
 					}else {
 						throw new CLIArgumentException(
-								String.format("Argument %s is required.", arg.name()));
+								String.format(ARG_REQUIRED, arg.name()));
 					}
 				}else {
-					if(value instanceof String) {
-						if(((String) value).isEmpty() && arg.required()){
+					if(value instanceof String && 
+						((String) value).length() == 0 && 
+						arg.required())
+					{
+						
 							throw new CLIArgumentException(
-									String.format("Argument %s is required.", arg.name()));
-						}
+									String.format(ARG_REQUIRED, arg.name()));
+						
 					}
 				}
-				value = f.get(command);
 			}
 		}
 	}
@@ -229,11 +251,11 @@ public class CommandFactory {
 			Field sfield = null;
 			if(command instanceof BaseCommand) {
 				
-				sfield = BaseCommand.class.getDeclaredField("name");
+				sfield = BaseCommand.class.getDeclaredField(PROP_NAME);
 				sfield.setAccessible(true);
 				sfield.set(command, props.value());
 				
-				sfield = BaseCommand.class.getDeclaredField("description");
+				sfield = BaseCommand.class.getDeclaredField(PROP_DESCRIPTION);
 				sfield.setAccessible(true);
 				sfield.set(command, props.description());
 			}
