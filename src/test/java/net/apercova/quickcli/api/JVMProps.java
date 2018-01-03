@@ -13,7 +13,7 @@ public class JVMProps extends BaseActionCommand {
 	@Override
 	public void execute() throws Exception {
 		out.println("Begin JVM Properties");
-		if(propName != null && !propName.isEmpty()) {
+		if(propName != null && propName.length() != 0) {
 			out.println(System.getProperties().getProperty(propName));
 		}else {
 			System.getProperties().list(out);
