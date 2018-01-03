@@ -43,10 +43,10 @@ public abstract class BaseCommand implements Command{
 	public void printUsage() {
 		if(getClass().isAnnotationPresent(CLICommand.class)) {
 			CLICommand command = getClass().getAnnotation(CLICommand.class);
-			if(command.value()!= null && !command.value().isEmpty()) {
+			if(command.value()!= null && command.value().length() != 0) {
 				out.printf("[%s]: ",command.value());
 			}
-			if(command.description() != null && !command.description().isEmpty()) {
+			if(command.description() != null && command.description().length() != 0) {
 				out.printf("%-100s",command.description());
 			}
 			out.printf("%n");
