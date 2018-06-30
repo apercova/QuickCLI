@@ -1,21 +1,28 @@
-package net.apercova.quickcli.api;
+package net.apercova.quickcli.command;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.util.Date;
+import java.util.Locale;
 
-import net.apercova.quickcli.api.BaseCommand;
-import net.apercova.quickcli.api.CLIArgument;
-import net.apercova.quickcli.api.CLICommand;
-import net.apercova.quickcli.api.CLIDatatypeConverter;
-import net.apercova.quickcli.api.SimpleCharsetConverter;
-import net.apercova.quickcli.api.SimpleDateConverter;
+import net.apercova.quickcli.ActionCommand;
+import net.apercova.quickcli.CLIArgument;
+import net.apercova.quickcli.CLICommand;
+import net.apercova.quickcli.CLIDatatypeConverter;
+import net.apercova.quickcli.examples.converter.SimpleCharsetConverter;
+import net.apercova.quickcli.examples.converter.SimpleLocaleConverter;
 
+/**
+ * Example of command value binding.
+ * Primitive types, {@link String}, {@link BigDecimal} and {@link BigInteger} are supported
+ * by default.
+ * 
+ * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
+ *
+ */
 @CLICommand("bind-ex")
-public class BindExamples extends BaseCommand{
-	
-		
+public class BindExamples extends ActionCommand {
+			
 	@CLIArgument(name="--texto",aliases={"--string"}, required=true)
 	private String texto;
 	@CLIArgument(name="--bits",aliases={"--byte"}, required=true)
@@ -36,16 +43,14 @@ public class BindExamples extends BaseCommand{
 	private BigInteger bint;
 	@CLIArgument(name="--bdec",aliases={"--big-decimal"}, required=true)
 	private BigDecimal bdec;
-	
-	@CLIArgument(name="--date",required=true)
-	@CLIDatatypeConverter(SimpleDateConverter.class)
-	private Date date;
-	
-	@CLIArgument(name="--cs", value="us-ascii")
+	@CLIArgument(name="--l",aliases={"--locale"}, required=false, value="us-ascii")
+	@CLIDatatypeConverter(SimpleLocaleConverter.class)
+	private Locale locale;
+	@CLIArgument(name="--cs",aliases={"--charset"}, required=false, value="utf-8")
 	@CLIDatatypeConverter(SimpleCharsetConverter.class)
-	private Charset charset;
+	private Charset cs;
 	
-	@CLIArgument(name="--help", usage="List available options" )	
+	@CLIArgument(name="--help", usage="List available options" )
 	private Boolean showHelp;
 
 	public String getTexto() {
@@ -127,28 +132,25 @@ public class BindExamples extends BaseCommand{
 	public void setBdec(BigDecimal bdec) {
 		this.bdec = bdec;
 	}
-
-	public Date getDate() {
-		return date;
+	
+	@Override
+	public Locale getLocale() {
+		return locale;
 	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
+	
 	public Charset getCharset() {
-		return charset;
-	}
-
-	public void setCharset(Charset charset) {
-		this.charset = charset;
+		return cs;
 	}
 
 	@Override
 	public String toString() {
 		return "BindExamples [texto=" + texto + ", bits=" + bits + ", corto=" + corto + ", booleano=" + booleano
 				+ ", entero=" + entero + ", largo=" + largo + ", flotante=" + flotante + ", doble=" + doble + ", bint="
-				+ bint + ", bdec=" + bdec + ", date=" + date + ", charset=" + charset + "]";
+				+ bint + ", bdec=" + bdec + ", charset=" + charset + "]";
+	}
+
+	public void execute() throws Exception {
+		System.out.print("Executed");
 	}
 	
 }

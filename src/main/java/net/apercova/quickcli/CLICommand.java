@@ -1,4 +1,4 @@
-package net.apercova.quickcli.api;
+package net.apercova.quickcli;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

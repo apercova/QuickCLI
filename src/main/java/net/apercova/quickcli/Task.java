@@ -1,17 +1,17 @@
-package net.apercova.quickcli.api;
+package net.apercova.quickcli;
 
 /**
- * Command that represents an action with no execution's return value
- * 
+ * Represents a task with return value
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @since 1.0
  *
  */
-public interface ActionCommand extends Command {
+public interface Task<T> extends Command {
 
 	/**
-	 * Executes an action
+	 * Executes a task with a return value
+	 * @return T Execution result
 	 * @throws Exception if an exception occurs
 	 */
-	public void execute() throws Exception;
+	public T execute() throws Exception;
 }

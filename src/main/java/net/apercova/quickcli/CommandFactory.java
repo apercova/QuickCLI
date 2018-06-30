@@ -1,13 +1,18 @@
-package net.apercova.quickcli.api;
+package net.apercova.quickcli;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -41,11 +46,120 @@ public class CommandFactory {
 	 */
 	public static <T extends Command> T createCommand(String[] args, Class<T> clazz) 
 			throws CLIArgumentException{
+		return createCommand(args, clazz, System.out, Charset.defaultCharset(), Locale.getDefault());
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param locale Output locale
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, Locale locale) 
+			throws CLIArgumentException{
+		return createCommand(args, clazz, System.out, Charset.defaultCharset(), locale);
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param out Output stream
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out) 
+			throws CLIArgumentException{
+		return createCommand(args, clazz, out, Charset.defaultCharset(), Locale.getDefault());
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param out Output stream
+	 * @param locale Output locale
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out, Locale locale) 
+			throws CLIArgumentException{
+		return createCommand(args, clazz, out, Charset.defaultCharset(), locale);
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param out Output stream
+	 * @param cs Output character set
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs) 
+			throws CLIArgumentException{
+		return createCommand(args, clazz, out, cs, Locale.getDefault());
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param out Output stream
+	 * @param cs Output character set
+	 * @param locale Output locale
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs, Locale locale) 
+			throws CLIArgumentException{
+		Writer writer = new OutputStreamWriter(
+					(out != null ? out: System.out), 
+					(cs != null ? cs: Charset.defaultCharset())
+				);
+		return createCommand(args, clazz, writer, locale);
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param writer Output writer
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, Writer writer) 
+			throws CLIArgumentException{
+		return createCommand(args, clazz, writer, Locale.getDefault());
+	}
+	
+	/**
+	 * Creates a command of the provided {@link Class} type
+	 * @param <T> Generic command type
+	 * @param args CLI Arguments
+	 * @param clazz Command type class
+	 * @param writer Output writer
+	 * @param locale Output locale
+	 * @return Command Command instance
+	 * @throws CLIArgumentException If an error occurs at command creation
+	 */
+	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, Writer writer, Locale locale) 
+			throws CLIArgumentException{
 		T command = null;
 		
 		try {
 			if(clazz.isAnnotationPresent(CLICommand.class)) {
 				command = clazz.newInstance();
+				command.setWriter(writer);
+				command.setLocale(locale);
 				synchronized (command) {
 					read(command, args);
 					verify(command);
@@ -249,13 +363,13 @@ public class CommandFactory {
 		if(command.getClass().isAnnotationPresent(CLICommand.class)) {
 			CLICommand props = command.getClass().getAnnotation(CLICommand.class);
 			Field sfield = null;
-			if(command instanceof BaseCommand) {
+			if(command instanceof DefaultCommand) {
 				
-				sfield = BaseCommand.class.getDeclaredField(PROP_NAME);
+				sfield = DefaultCommand.class.getDeclaredField(PROP_NAME);
 				sfield.setAccessible(true);
 				sfield.set(command, props.value());
 				
-				sfield = BaseCommand.class.getDeclaredField(PROP_DESCRIPTION);
+				sfield = DefaultCommand.class.getDeclaredField(PROP_DESCRIPTION);
 				sfield.setAccessible(true);
 				sfield.set(command, props.description());
 			}

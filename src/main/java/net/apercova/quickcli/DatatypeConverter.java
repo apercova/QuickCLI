@@ -1,4 +1,4 @@
-package net.apercova.quickcli.api;
+package net.apercova.quickcli;
 
 /**
  * Datatype converter
@@ -24,5 +24,5 @@ public interface DatatypeConverter<T> {
 	 * @return Text-based object's representation
 	 * @throws DatatypeConverterException If an exception occurs
 	 */
-	public String marshall(T value) throws DatatypeConverterException;
+	public String format(T value) throws DatatypeConverterException;
 }
