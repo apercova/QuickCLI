@@ -24,13 +24,31 @@ import java.util.Map;
  */
 public class CommandFactory {
 	
-	protected static final String ARG_REQUIRED = "Argument %s is required.";
-	protected static final String ARG_NOT_VALID = "%s is not a valid argument.";
-	protected static final String NUM_ARG_NOT_VALID = "Argument %s is not valid. %s is not a valid number for type: %s %n";
-	protected static final String TYPE_NOT_VALID = "Type %s is not a valid command type.";
-	protected static final String VALUE_CONV_ERROR = "Value conversion error for argument %s. value: %s %n";
-	protected static final String PROP_NAME ="name";
-	protected static final String PROP_DESCRIPTION ="description";
+	/**
+	 * Common messages
+	 * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
+	 * @since 1.0
+	 *
+	 */
+	public static enum Messages {
+		ARG_REQUIRED("Argument %s is required."),
+		ARG_NOT_VALID("%s is not a valid argument."),
+		NUM_ARG_NOT_VALID("Argument %s is not valid. %s is not a valid number for type: %s %n"),
+		TYPE_NOT_VALID("Type %s is not a valid command type."),
+		VALUE_CONV_ERROR("Value conversion error for argument %s. value: %s %n"),
+		PROP_NAME("name"),
+		PROP_DESCRIPTION("description");
+		
+		private final String text;
+		private Messages(String text) {
+			this.text = text;
+		}
+		
+		public String getText() {
+			return text;
+		}
+		
+	}
 	
 	private CommandFactory() {
 		super();
@@ -165,14 +183,14 @@ public class CommandFactory {
 					verify(command);
 				}
 			}else {
-				throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz));
+				throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz));
 			}
 		} catch (IllegalAccessException e) {
-			throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz), e);
+			throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz), e);
 		} catch (NoSuchFieldException e) {
-			throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz), e);
+			throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz), e);
 		} catch (InstantiationException e) {
-			throw new CLIArgumentException(String.format(TYPE_NOT_VALID, clazz), e);
+			throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz), e);
 		}
 
 		return command;
@@ -222,13 +240,13 @@ public class CommandFactory {
 						}else {
 							if((i+1)>= argSet.size()) {
 								throw new IllegalArgumentException(
-										String.format(ARG_REQUIRED, alias));
+										String.format(Messages.ARG_REQUIRED.getText(), alias));
 							}						
 						}
 					}
 				}else {
 					throw new IllegalArgumentException(
-							String.format(ARG_NOT_VALID, arg));
+							String.format(Messages.ARG_NOT_VALID.getText(), arg));
 				}
 			}else {
 				if(!isArgument(arg, argMap)) {
@@ -241,7 +259,7 @@ public class CommandFactory {
 					}
 				} else {
 					throw new IllegalArgumentException(
-							String.format(ARG_REQUIRED, alias));
+							String.format(Messages.ARG_REQUIRED.getText(), alias));
 				}
 			}	
 		}
@@ -269,7 +287,7 @@ public class CommandFactory {
 			field.set(command, converterClass.cast(converterImpl).parse(value));
 		} catch (DatatypeConverterException e) {
 			throw new CLIArgumentException(
-					String.format(VALUE_CONV_ERROR, arg.name(), value), e);
+					String.format(Messages.VALUE_CONV_ERROR.getText(), arg.name(), value), e);
 		}
 	}
 	
@@ -319,7 +337,7 @@ public class CommandFactory {
 			}
 		} catch (NumberFormatException e) {
 			throw new CLIArgumentException(
-					String.format(NUM_ARG_NOT_VALID, arg.name(), value, field.getType().getName()), e);
+					String.format(Messages.NUM_ARG_NOT_VALID.getText(), arg.name(), value, field.getType().getName()), e);
 		}
 
 		
@@ -340,7 +358,7 @@ public class CommandFactory {
 						parseValue(arg, f, arg.value() , command);
 					}else {
 						throw new CLIArgumentException(
-								String.format(ARG_REQUIRED, arg.name()));
+								String.format(Messages.ARG_REQUIRED.getText(), arg.name()));
 					}
 				}else {
 					if(value instanceof String && 
@@ -349,7 +367,7 @@ public class CommandFactory {
 					{
 						
 							throw new CLIArgumentException(
-									String.format(ARG_REQUIRED, arg.name()));
+									String.format(Messages.ARG_REQUIRED.getText(), arg.name()));
 						
 					}
 				}
@@ -365,11 +383,11 @@ public class CommandFactory {
 			Field sfield = null;
 			if(command instanceof DefaultCommand) {
 				
-				sfield = DefaultCommand.class.getDeclaredField(PROP_NAME);
+				sfield = DefaultCommand.class.getDeclaredField(Messages.PROP_NAME.getText());
 				sfield.setAccessible(true);
 				sfield.set(command, props.value());
 				
-				sfield = DefaultCommand.class.getDeclaredField(PROP_DESCRIPTION);
+				sfield = DefaultCommand.class.getDeclaredField(Messages.PROP_DESCRIPTION.getText());
 				sfield.setAccessible(true);
 				sfield.set(command, props.description());
 			}
