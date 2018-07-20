@@ -62,7 +62,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz) 
 			throws CLIArgumentException{
 		return createCommand(args, clazz, System.out, Charset.defaultCharset(), Locale.getDefault());
 	}
@@ -76,7 +76,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, Locale locale) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Locale locale) 
 			throws CLIArgumentException{
 		return createCommand(args, clazz, System.out, Charset.defaultCharset(), locale);
 	}
@@ -90,7 +90,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out) 
 			throws CLIArgumentException{
 		return createCommand(args, clazz, out, Charset.defaultCharset(), Locale.getDefault());
 	}
@@ -105,7 +105,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out, Locale locale) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Locale locale) 
 			throws CLIArgumentException{
 		return createCommand(args, clazz, out, Charset.defaultCharset(), locale);
 	}
@@ -120,7 +120,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs) 
 			throws CLIArgumentException{
 		return createCommand(args, clazz, out, cs, Locale.getDefault());
 	}
@@ -136,7 +136,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs, Locale locale) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs, Locale locale) 
 			throws CLIArgumentException{
 		Writer writer = new OutputStreamWriter(
 					(out != null ? out: System.out), 
@@ -154,7 +154,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, Writer writer) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer) 
 			throws CLIArgumentException{
 		return createCommand(args, clazz, writer, Locale.getDefault());
 	}
@@ -169,7 +169,7 @@ public class CommandFactory {
 	 * @return Command Command instance
 	 * @throws CLIArgumentException If an error occurs at command creation
 	 */
-	public static <T extends Command> T createCommand(String[] args, Class<T> clazz, Writer writer, Locale locale) 
+	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer, Locale locale) 
 			throws CLIArgumentException{
 		T command = null;
 		
@@ -196,7 +196,7 @@ public class CommandFactory {
 		return command;
 	}
 		
-	private static <T extends Command> void read(T command, String[] args) 
+	private static <T extends Command<?>> void read(T command, String[] args) 
 			throws CLIArgumentException, NoSuchFieldException, IllegalAccessException, InstantiationException  {
 	
 		//Command props
@@ -266,7 +266,7 @@ public class CommandFactory {
 
 	}
 	
-	private static <T extends Command> void parseValue(CLIArgument arg, Field field, String value, T command) 
+	private static <T extends Command<?>> void parseValue(CLIArgument arg, Field field, String value, T command) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException {
 		if(!field.isAccessible()) {
 			field.setAccessible(true);
@@ -279,7 +279,7 @@ public class CommandFactory {
         }
 	}
 	
-	private static <T extends Command> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command) 
+	private static <T extends Command<?>> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException{
 		try {
 			Class<? extends DatatypeConverter<?>> converterClass = converter.value();
@@ -291,7 +291,7 @@ public class CommandFactory {
 		}
 	}
 	
-	private static <T extends Command> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command) 
+	private static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command) 
 			throws CLIArgumentException, IllegalAccessException {
 		
 		if(String.class.equals(field.getType())) {
@@ -343,7 +343,7 @@ public class CommandFactory {
 		
 	}
 	
-	private static <T extends Command> void verify(T command) 
+	private static <T extends Command<?>> void verify(T command) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException {
 		
 		//Validating fields
@@ -375,19 +375,19 @@ public class CommandFactory {
 		}
 	}
 		
-	private static <T extends Command> void readCommandProps(T command) 
+	private static <T extends Command<?>> void readCommandProps(T command) 
 		throws NoSuchFieldException, IllegalAccessException{
 		
 		if(command.getClass().isAnnotationPresent(CLICommand.class)) {
 			CLICommand props = command.getClass().getAnnotation(CLICommand.class);
 			Field sfield = null;
-			if(command instanceof DefaultCommand) {
+			if(command instanceof Command) {
 				
-				sfield = DefaultCommand.class.getDeclaredField(Messages.PROP_NAME.getText());
+				sfield = Command.class.getDeclaredField(Messages.PROP_NAME.getText());
 				sfield.setAccessible(true);
 				sfield.set(command, props.value());
 				
-				sfield = DefaultCommand.class.getDeclaredField(Messages.PROP_DESCRIPTION.getText());
+				sfield = Command.class.getDeclaredField(Messages.PROP_DESCRIPTION.getText());
 				sfield.setAccessible(true);
 				sfield.set(command, props.description());
 			}
@@ -395,7 +395,7 @@ public class CommandFactory {
 
 	}
 	
-	private static <T extends Command> Map<String, CLIArgument> getDeclaredArgs(T command){
+	private static <T extends Command<?>> Map<String, CLIArgument> getDeclaredArgs(T command){
 		Map<String, CLIArgument> argMap = new HashMap<String, CLIArgument>();
 		for(Field f: command.getClass().getDeclaredFields()) {
 			if(f.isAnnotationPresent(CLIArgument.class)) {
@@ -413,7 +413,7 @@ public class CommandFactory {
 		return args.containsKey(alias);
 	}
 	
-	private static <T extends Command> Field getAnnotatedField(CLIArgument argument, T command) {
+	private static <T extends Command<?>> Field getAnnotatedField(CLIArgument argument, T command) {
 		Field field = null;
 		for(Field f: command.getClass().getDeclaredFields()) {
 			if(f.isAnnotationPresent(CLIArgument.class)) {

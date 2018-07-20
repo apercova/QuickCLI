@@ -1,17 +1,19 @@
 package net.apercova.quickcli;
 
 /**
- * Represents a task with return value
+ * Executable object
+ * Represents an executable object
+ * 
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @since 1.0
  *
  */
-public interface Task<T> extends Command {
-
+public interface Executable<T> {
+	
 	/**
-	 * Executes a task with a return value
-	 * @return T Execution result
+	 * Run execution
 	 * @throws Exception if an exception occurs
 	 */
-	public T execute() throws Exception;
+	public T execute() throws ExecutionException;
+	
 }
