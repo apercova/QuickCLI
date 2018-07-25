@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * Factory for {@link Command } creation
+ * Factory for {@link Command } creation.
  * 
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @since 1.0
@@ -31,12 +31,12 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz) 
 			throws CLIArgumentException{
@@ -44,13 +44,13 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param locale Output locale
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param locale Output locale.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Locale locale) 
 			throws CLIArgumentException{
@@ -58,13 +58,13 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param out Output stream
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param out Output stream.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out) 
 			throws CLIArgumentException{
@@ -72,14 +72,14 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param out Output stream
-	 * @param locale Output locale
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param out Output stream.
+	 * @param locale Output locale.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Locale locale) 
 			throws CLIArgumentException{
@@ -87,14 +87,14 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param out Output stream
-	 * @param cs Output character set
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param out Output stream.
+	 * @param cs Output character set.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs) 
 			throws CLIArgumentException{
@@ -102,15 +102,15 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param out Output stream
-	 * @param cs Output character set
-	 * @param locale Output locale
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param out Output stream.
+	 * @param cs Output character set.
+	 * @param locale Output locale.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs, Locale locale) 
 			throws CLIArgumentException{
@@ -122,13 +122,13 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param writer Output writer
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param writer Output writer.
+	 * @return Command {@link Command} instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer) 
 			throws CLIArgumentException{
@@ -136,14 +136,14 @@ public class CommandFactory {
 	}
 	
 	/**
-	 * Creates a command of the provided {@link Class} type
-	 * @param <T> Generic command type
-	 * @param args CLI Arguments
-	 * @param clazz Command type class
-	 * @param writer Output writer
-	 * @param locale Output locale
-	 * @return Command Command instance
-	 * @throws CLIArgumentException If an error occurs at command creation
+	 * Creates a command of the provided {@link Class} type.
+	 * @param <T> Generic command type.
+	 * @param args CLI Arguments.
+	 * @param clazz Command type class.
+	 * @param writer Output writer.
+	 * @param locale Output locale.
+	 * @return Command Command instance.
+	 * @throws CLIArgumentException If an error occurs at command creation.
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer, Locale locale) 
 			throws CLIArgumentException{
@@ -187,10 +187,20 @@ public class CommandFactory {
 		return command;
 	}
 
+	/**
+	 * Read and set command's properties.
+	 * @param command {@link Command} instance.
+	 * @param args Command's arguments.
+	 * @param messages {@link ResourceBundle} messages.
+	 * @throws CLIArgumentException
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
 	private static <T extends Command<?>> void read(T command, String[] args, ResourceBundle messages) 
 			throws CLIArgumentException, NoSuchFieldException, IllegalAccessException, InstantiationException  {
 	
-		//Command props
+		//Command properties
 		readCommandProps(command);		
 		
 		//CLI Arguments
@@ -260,6 +270,58 @@ public class CommandFactory {
 
 	}
 	
+	/**
+	 * Verify command's required arguments.
+	 * @param command {@link Command} instance.
+	 * @param messages {@link ResourceBundle} messages.
+	 * @throws CLIArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
+	private static <T extends Command<?>> void verify(T command, ResourceBundle messages) 
+			throws CLIArgumentException, IllegalAccessException, InstantiationException {
+		
+		//Validating fields
+		for(Field f: command.getClass().getDeclaredFields()) {
+			if(f.isAnnotationPresent(CLIArgument.class)) {
+				f.setAccessible(true);
+				Object value = f.get(command);
+				CLIArgument arg = f.getAnnotation(CLIArgument.class);
+				
+				if(value == null) {
+					if(!arg.required()) {
+						parseValue(arg, f, arg.value() , command, messages);
+					}else {
+						throw new CLIArgumentException(
+								MessageFormat.format(messages.getString("arg.required"), arg.name())
+								);
+					}
+				}else {
+					if(value instanceof String && 
+						((String) value).length() == 0 && 
+						arg.required())
+					{
+						throw new CLIArgumentException(
+								MessageFormat.format(messages.getString("arg.required"), arg.name())
+								);
+						
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Parse a command argument value.
+	 * @param arg Command argument.
+	 * @param field {@link Field} for storing parsed value.
+	 * @param value Argument value as string.
+	 * @param command {@link Command} instance.
+	 * @param messages {@link ResourceBundle} messages.
+	 * @throws CLIArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
 	private static <T extends Command<?>> void parseValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException {
 		if(!field.isAccessible()) {
@@ -273,20 +335,45 @@ public class CommandFactory {
         }
 	}
 	
+	/**
+	 * Parse a custom-type command argument value.
+	 * @param arg Command argument.
+	 * @param converter {@link Field} for storing parsed value.
+	 * @param field {@link Field} for storing parsed value.
+	 * @param value Argument value as string.
+	 * @param command {@link Command} instance.
+	 * @param messages {@link ResourceBundle} messages.
+	 * @throws CLIArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
 	private static <T extends Command<?>> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException{
+		
 		try {
 			Class<? extends DatatypeConverter<?>> converterClass = converter.value();
 			Object converterImpl = converterClass.newInstance();
-			field.set(command, converterClass.cast(converterImpl).parse(value));
+			field.set(command, converterClass.cast(converterImpl).parse(value));	
 		} catch (DatatypeConverterException e) {
 			throw new CLIArgumentException(
-					MessageFormat.format(messages.getString("arg.conversion.error"), arg.name(), value),
-					e
-					);
+				MessageFormat.format(messages.getString("arg.conversion.error"), arg.name(), value),
+				e
+				);
 		}
+			
+			
 	}
 	
+	/**
+	 * Parse a primitive command argument value.
+	 * @param arg Command argument.
+	 * @param field {@link Field} for storing parsed value.
+	 * @param value Argument value as string.
+	 * @param command {@link Command} instance.
+	 * @param messages {@link ResourceBundle} messages.
+	 * @throws CLIArgumentException
+	 * @throws IllegalAccessException
+	 */
 	private static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException {
 		
@@ -341,39 +428,12 @@ public class CommandFactory {
 		
 	}
 	
-	private static <T extends Command<?>> void verify(T command, ResourceBundle messages) 
-			throws CLIArgumentException, IllegalAccessException, InstantiationException {
-		
-		//Validating fields
-		for(Field f: command.getClass().getDeclaredFields()) {
-			if(f.isAnnotationPresent(CLIArgument.class)) {
-				f.setAccessible(true);
-				Object value = f.get(command);
-				CLIArgument arg = f.getAnnotation(CLIArgument.class);
-				
-				if(value == null) {
-					if(!arg.required()) {
-						parseValue(arg, f, arg.value() , command, messages);
-					}else {
-						throw new CLIArgumentException(
-								MessageFormat.format(messages.getString("arg.required"), arg.name())
-								);
-					}
-				}else {
-					if(value instanceof String && 
-						((String) value).length() == 0 && 
-						arg.required())
-					{
-						throw new CLIArgumentException(
-								MessageFormat.format(messages.getString("arg.required"), arg.name())
-								);
-						
-					}
-				}
-			}
-		}
-	}
-		
+	/**
+	 * Read and set command's properties.
+	 * @param command {@link Command} Instance.
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private static <T extends Command<?>> void readCommandProps(T command) 
 		throws NoSuchFieldException, IllegalAccessException{
 		
@@ -392,6 +452,11 @@ public class CommandFactory {
 
 	}
 	
+	/**
+	 * Retrieve Command's declared {@link CLIArgument} map.
+	 * @param command {@link Command} instance.
+	 * @return Command's declared {@link CLIArgument} map.
+	 */
 	private static <T extends Command<?>> Map<String, CLIArgument> getDeclaredArgs(T command){
 		Map<String, CLIArgument> argMap = new HashMap<String, CLIArgument>();
 		for(Field f: command.getClass().getDeclaredFields()) {
@@ -406,10 +471,22 @@ public class CommandFactory {
 		return Collections.unmodifiableMap(argMap);
 	}
 	
+	/**
+	 * Determine if given alias is a valid {@link CLIArgument}
+	 * @param alias Test alias.
+	 * @param args {@link Command} arguments
+	 * @return <code>true</code> if given alias is a valid {@link CLIArgument}. <code>false</code> other ways. 
+	 */
 	private static boolean isArgument(String alias, Map<String, CLIArgument> args) {
 		return args.containsKey(alias);
 	}
 	
+	/**
+	 * Return the field that has been annotated with {@link CLIArgument}.
+	 * @param argument {@link CLIArgument} annotation.
+	 * @param command {@link Command} instance.
+	 * @return {@link} Field that has been annotated with {@link CLIArgument}.
+	 */
 	private static <T extends Command<?>> Field getAnnotatedField(CLIArgument argument, T command) {
 		Field field = null;
 		for(Field f: command.getClass().getDeclaredFields()) {

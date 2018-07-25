@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 /**
- * DefaultCommand base command
+ * DefaultCommand base command.
  * 
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @since 1.0
@@ -18,9 +18,21 @@ import java.util.Locale;
  */
 public abstract class Command<T> implements Executable<T>, Closeable{
 	
+	/**
+	 * Command name.
+	 */
 	protected String name;
+	/**
+	 * Command description.
+	 */
 	protected String description;
+	/**
+	 * Command {@link Locale}.
+	 */
 	protected Locale locale;
+	/**
+	 * Command {@link PrintWriter}.
+	 */
 	protected PrintWriter writer;
 	
 	/**
@@ -71,7 +83,7 @@ public abstract class Command<T> implements Executable<T>, Closeable{
 		return locale;
 	}
 	/**
-	 * Display usage info 
+	 * Display auto-generated usage info. 
 	 */
 	public void printUsage() {
 		if(getClass().isAnnotationPresent(CLICommand.class)) {
@@ -100,7 +112,8 @@ public abstract class Command<T> implements Executable<T>, Closeable{
 	}
 	
 	/**
-	 * Default implementation
+	 * implements command execution.
+	 * Prints command usage as default implementation.
 	 */
 	public T execute() throws ExecutionException {
 		this.printUsage();
