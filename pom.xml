@@ -24,23 +24,13 @@
   </properties>
   
   <build>
+		<directory>dist</directory>
         <plugins>
         	<plugin>
         		<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.1.0</version>
 				<configuration>
-					<filesets>
-						<fileset>
-							<directory>${basedir}/docs/apidocs/</directory>
-						    <includes>
-							    <include>**/**</include>
-						    </includes>
-						    <excludes>
-						    </excludes>
-						    <followSymlinks>false</followSymlinks>
-						</fileset>
-					</filesets>
 				</configuration>
 			</plugin>
             <plugin>
@@ -90,24 +80,6 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
-                <executions>
-                	<execution>
-                		<id>copy-resources</id>
-                		<phase>package</phase>
-                		<goals>
-                			<goal>copy-resources</goal>
-                		</goals>
-                		<configuration>
-							<outputDirectory>${basedir}/docs/apidocs/</outputDirectory>
-							<resources>          
-								<resource>
-									<directory>target/apidocs</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>              
-			            </configuration>            
-                	</execution>
-                </executions>
             </plugin>
         </plugins>
 	</build>
