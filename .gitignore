@@ -36,3 +36,6 @@ buildNumber.properties
 #MS VSCode
 .settings/
 .vscode/
+
+#Api Docs
+docs/

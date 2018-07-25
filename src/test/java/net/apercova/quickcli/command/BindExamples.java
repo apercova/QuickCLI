@@ -5,10 +5,11 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import net.apercova.quickcli.ActionCommand;
 import net.apercova.quickcli.CLIArgument;
 import net.apercova.quickcli.CLICommand;
 import net.apercova.quickcli.CLIDatatypeConverter;
+import net.apercova.quickcli.Command;
+import net.apercova.quickcli.ExecutionException;
 import net.apercova.quickcli.examples.converter.SimpleCharsetConverter;
 import net.apercova.quickcli.examples.converter.SimpleLocaleConverter;
 
@@ -21,7 +22,7 @@ import net.apercova.quickcli.examples.converter.SimpleLocaleConverter;
  *
  */
 @CLICommand("bind-ex")
-public class BindExamples extends ActionCommand {
+public class BindExamples extends Command<Void> {
 			
 	@CLIArgument(name="--texto",aliases={"--string"}, required=true)
 	private String texto;
@@ -146,11 +147,12 @@ public class BindExamples extends ActionCommand {
 	public String toString() {
 		return "BindExamples [texto=" + texto + ", bits=" + bits + ", corto=" + corto + ", booleano=" + booleano
 				+ ", entero=" + entero + ", largo=" + largo + ", flotante=" + flotante + ", doble=" + doble + ", bint="
-				+ bint + ", bdec=" + bdec + ", charset=" + charset + "]";
+				+ bint + ", bdec=" + bdec + "]";
 	}
 
-	public void execute() throws Exception {
-		System.out.print("Executed");
+	public Void execute() throws ExecutionException {
+		System.out.print("Successfully executed");
+		return null;
 	}
 	
 }
