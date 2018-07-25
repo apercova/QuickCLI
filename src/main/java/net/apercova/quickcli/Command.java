@@ -1,5 +1,7 @@
 package net.apercova.quickcli;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -14,7 +16,7 @@ import java.util.Locale;
  * @since 1.0
  *
  */
-public abstract class Command<T> implements Executable<T>{
+public abstract class Command<T> implements Executable<T>, Closeable{
 	
 	protected String name;
 	protected String description;
@@ -96,7 +98,15 @@ public abstract class Command<T> implements Executable<T>{
 			}
 		}
 	}
-
+	
+	/**
+	 * Default implementation
+	 */
+	public T execute() throws ExecutionException {
+		this.printUsage();
+		return null;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -115,12 +125,10 @@ public abstract class Command<T> implements Executable<T>{
 		return sb.toString();
 	}
 	
-	/**
-	 * Default implementation
-	 */
-	public T execute() throws ExecutionException {
-		this.printUsage();
-		return null;
+	public void close() throws IOException {
+		if(writer != null) {
+			writer.close();
+		}
 	}
 	
 }
