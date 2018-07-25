@@ -1,29 +1,29 @@
-package net.apercova.quickcli;
+package io.apercova.quickcli;
 
 /**
- * Command execution exception.
+ * Datatype conversion exception.
  * 
  * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @since 1.0
  *
  */
-public class ExecutionException extends Exception{
+public class DatatypeConverterException extends Exception{
 
 	private static final long serialVersionUID = 4772821535245558588L;
 
-	public ExecutionException() {
+	public DatatypeConverterException() {
 		super();
 	}
 
-	public ExecutionException(String message, Throwable cause) {
+	public DatatypeConverterException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public ExecutionException(String message) {
+	public DatatypeConverterException(String message) {
 		super(message);
 	}
 
-	public ExecutionException(Throwable cause) {
+	public DatatypeConverterException(Throwable cause) {
 		super(cause);
 	}
 

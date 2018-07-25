@@ -11,7 +11,7 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.apercova.quickcli.CommandFactory;
+import io.apercova.quickcli.CommandFactory;
 import net.apercova.quickcli.command.BindExamples;
 
 public class BindExamplesTest {
@@ -30,7 +30,6 @@ public class BindExamplesTest {
 				"--double",String.valueOf(Double.MAX_VALUE),
 				"--big-integer",String.valueOf(Long.MAX_VALUE+ Long.MAX_VALUE),
 				"--big-decimal",String.valueOf(Long.MAX_VALUE*1.23),
-				"--l","pt_PT",
 				"--cs","iso-8859-1",
 				"--help"
 				};
@@ -50,7 +49,6 @@ public class BindExamplesTest {
 		assertEquals(new BigInteger((Long.MAX_VALUE + Long.MAX_VALUE)+""),command.getBint());
 		assertEquals(new BigDecimal((Long.MAX_VALUE*1.23)+""),command.getBdec());
 		
-		assertEquals(new Locale("pt","PT"), command.getLocale());
 		assertEquals(Charset.forName("iso-8859-1"), command.getCharset());
 		
 		command.execute();

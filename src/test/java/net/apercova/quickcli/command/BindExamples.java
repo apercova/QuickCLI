@@ -5,13 +5,12 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import net.apercova.quickcli.CLIArgument;
-import net.apercova.quickcli.CLICommand;
-import net.apercova.quickcli.CLIDatatypeConverter;
-import net.apercova.quickcli.Command;
-import net.apercova.quickcli.ExecutionException;
+import io.apercova.quickcli.CLIArgument;
+import io.apercova.quickcli.CLICommand;
+import io.apercova.quickcli.CLIDatatypeConverter;
+import io.apercova.quickcli.Command;
+import io.apercova.quickcli.ExecutionException;
 import net.apercova.quickcli.examples.converter.SimpleCharsetConverter;
-import net.apercova.quickcli.examples.converter.SimpleLocaleConverter;
 
 /**
  * Example of command value binding.
@@ -44,9 +43,7 @@ public class BindExamples extends Command<Void> {
 	private BigInteger bint;
 	@CLIArgument(name="--bdec",aliases={"--big-decimal"}, required=true)
 	private BigDecimal bdec;
-	@CLIArgument(name="--l",aliases={"--locale"}, required=false, value="us-ascii")
-	@CLIDatatypeConverter(SimpleLocaleConverter.class)
-	private Locale locale;
+	
 	@CLIArgument(name="--cs",aliases={"--charset"}, required=false, value="utf-8")
 	@CLIDatatypeConverter(SimpleCharsetConverter.class)
 	private Charset cs;

@@ -1,4 +1,4 @@
-package net.apercova.quickcli;
+package io.apercova.quickcli;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -24,7 +24,9 @@ import java.util.ResourceBundle;
  * @since 1.0
  *
  */
-public class CommandFactory {
+public final class CommandFactory {
+	
+	private static final String MESSAGES_BOUNDLE = "io.apercova.quickcli.i18n.messages";
 		
 	private CommandFactory() {
 		super();
@@ -150,7 +152,7 @@ public class CommandFactory {
 		locale = locale == null? Locale.getDefault() : locale;		
 		
 		T command = null;
-		ResourceBundle messages = ResourceBundle.getBundle("net.apercova.quickcli.i18n.messages", locale);
+		ResourceBundle messages = ResourceBundle.getBundle(MESSAGES_BOUNDLE, locale);
 		
 		try {
 			if(clazz.isAnnotationPresent(CLICommand.class)) {

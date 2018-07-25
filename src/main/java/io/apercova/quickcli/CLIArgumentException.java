@@ -1,4 +1,4 @@
-package net.apercova.quickcli;
+package io.apercova.quickcli;
 
 /**
  * Represents an exception occurred when parsing arguments.

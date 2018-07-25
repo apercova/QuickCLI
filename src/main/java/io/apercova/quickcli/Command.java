@@ -1,4 +1,4 @@
-package net.apercova.quickcli;
+package io.apercova.quickcli;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -127,8 +128,11 @@ public abstract class Command<T> implements Executable<T>, Closeable{
 		
 		for(Field f: getClass().getDeclaredFields()) {
 			try {
-				f.setAccessible(true);
-				sb.append(String.format(", %s=%s", f.getName(), f.get(this)));
+				if(Modifier.isPublic(f.getModifiers()) || 
+						f.isAnnotationPresent(CLIArgument.class)) {
+					f.setAccessible(true);
+					sb.append(String.format(", %s=%s", f.getName(), f.get(this)));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				continue;

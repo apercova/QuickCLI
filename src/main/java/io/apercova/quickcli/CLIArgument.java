@@ -1,4 +1,4 @@
-package net.apercova.quickcli;
+package io.apercova.quickcli;
 
 /**
  * Command-line argument annotation.
