@@ -1,9 +1,9 @@
 package net.apercova.quickcli;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -18,9 +18,8 @@ public abstract class Command<T> implements Executable<T>{
 	
 	protected String name;
 	protected String description;
-	protected PrintWriter writer;
-	protected Charset charset;
 	protected Locale locale;
+	protected PrintWriter writer;
 	
 	/**
 	 * Retrieve command's name.
@@ -29,7 +28,7 @@ public abstract class Command<T> implements Executable<T>{
 		return name;
 	}
 	/**
-	 * Retrieve command's dsscription.
+	 * Retrieve command's description.
 	 */
 	public String getDescription() {
 		return description;
@@ -53,13 +52,11 @@ public abstract class Command<T> implements Executable<T>{
 		return writer;
 	}
 	/**
-	 * Set underlying {@link Locale}
-	 * @param locale Locale
+	 * Set provided {@link Locale} as the underlying {@link Locale}
 	 */
 	public void setLocale(Locale locale) {
-		this.locale = locale != null ? locale : Locale.getDefault();
+		this.locale = locale == null ? Locale.getDefault() : locale;
 	}
-	
 	/**
 	 * retrieve underlying {@link Locale}
 	 */

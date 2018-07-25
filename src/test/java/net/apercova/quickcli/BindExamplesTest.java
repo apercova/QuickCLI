@@ -38,7 +38,7 @@ public class BindExamplesTest {
 	
 	@Test
 	public void test() throws Exception {
-		BindExamples command = CommandFactory.createCommand(args, BindExamples.class);	
+		BindExamples command = CommandFactory.createCommand(args, BindExamples.class, new Locale("es"));	
 		assertTrue(command != null);
 		
 		assertEquals(Byte.MAX_VALUE,command.getBits());

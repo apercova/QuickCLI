@@ -147,7 +147,7 @@ public class BindExamples extends Command<Void> {
 	public String toString() {
 		return "BindExamples [texto=" + texto + ", bits=" + bits + ", corto=" + corto + ", booleano=" + booleano
 				+ ", entero=" + entero + ", largo=" + largo + ", flotante=" + flotante + ", doble=" + doble + ", bint="
-				+ bint + ", bdec=" + bdec + ", charset=" + charset + "]";
+				+ bint + ", bdec=" + bdec + "]";
 	}
 
 	public Void execute() throws ExecutionException {

@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Factory for {@link Command } creation
@@ -23,33 +25,7 @@ import java.util.Map;
  *
  */
 public class CommandFactory {
-	
-	/**
-	 * Common messages
-	 * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
-	 * @since 1.0
-	 *
-	 */
-	public static enum Messages {
-		ARG_REQUIRED("Argument %s is required."),
-		ARG_NOT_VALID("%s is not a valid argument."),
-		NUM_ARG_NOT_VALID("Argument %s is not valid. %s is not a valid number for type: %s %n"),
-		TYPE_NOT_VALID("Type %s is not a valid command type."),
-		VALUE_CONV_ERROR("Value conversion error for argument %s. value: %s %n"),
-		PROP_NAME("name"),
-		PROP_DESCRIPTION("description");
 		
-		private final String text;
-		private Messages(String text) {
-			this.text = text;
-		}
-		
-		public String getText() {
-			return text;
-		}
-		
-	}
-	
 	private CommandFactory() {
 		super();
 	}
@@ -171,32 +147,47 @@ public class CommandFactory {
 	 */
 	public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer, Locale locale) 
 			throws CLIArgumentException{
+		locale = locale == null? Locale.getDefault() : locale;		
+		
 		T command = null;
+		ResourceBundle messages = ResourceBundle.getBundle("net.apercova.quickcli.i18n.messages", locale);
 		
 		try {
 			if(clazz.isAnnotationPresent(CLICommand.class)) {
 				command = clazz.newInstance();
-				command.setWriter(writer);
 				command.setLocale(locale);
+				command.setWriter(writer);
+				
 				synchronized (command) {
-					read(command, args);
-					verify(command);
+					read(command, args, messages);
+					verify(command, messages);
 				}
 			}else {
-				throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz));
+				throw new CLIArgumentException(
+						MessageFormat.format(messages.getString("type.invalid"), clazz.getName())
+						);
 			}
 		} catch (IllegalAccessException e) {
-			throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz), e);
+			throw new CLIArgumentException(
+					MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
+					e
+					);
 		} catch (NoSuchFieldException e) {
-			throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz), e);
+			throw new CLIArgumentException(
+					MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
+					e
+					);
 		} catch (InstantiationException e) {
-			throw new CLIArgumentException(String.format(Messages.TYPE_NOT_VALID.getText(), clazz), e);
+			throw new CLIArgumentException(
+					MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
+					e
+					);
 		}
 
 		return command;
 	}
-		
-	private static <T extends Command<?>> void read(T command, String[] args) 
+
+	private static <T extends Command<?>> void read(T command, String[] args, ResourceBundle messages) 
 			throws CLIArgumentException, NoSuchFieldException, IllegalAccessException, InstantiationException  {
 	
 		//Command props
@@ -222,64 +213,67 @@ public class CommandFactory {
 					if(field != null) {
 						field.setAccessible(true);
 						if(boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
-							parseValue(argMap.get(arg), field, String.valueOf(Boolean.TRUE), command);							
+							parseValue(argMap.get(arg), field, String.valueOf(Boolean.TRUE), command, messages);							
 							lookArg = true;
 							alias = null;
 							
 						} else if(!argMap.get(arg).required()) {
 							if((i+1)< argSet.size() && !isArgument( argSet.get((i+1)) , argMap)) {
-								parseValue(argMap.get(arg), field, argSet.get((i+1)), command);
+								parseValue(argMap.get(arg), field, argSet.get((i+1)), command, messages);
 								i++;
 								
 							}else {		
-								parseValue(argMap.get(arg), field, argMap.get(arg).value(), command);
+								parseValue(argMap.get(arg), field, argMap.get(arg).value(), command, messages);
 
 							}
 							lookArg = true;
 							alias = null;
 						}else {
 							if((i+1)>= argSet.size()) {
-								throw new IllegalArgumentException(
-										String.format(Messages.ARG_REQUIRED.getText(), alias));
+								throw new CLIArgumentException(
+										MessageFormat.format(messages.getString("arg.required"), alias)
+										);
 							}						
 						}
 					}
 				}else {
-					throw new IllegalArgumentException(
-							String.format(Messages.ARG_NOT_VALID.getText(), arg));
+					throw new CLIArgumentException(
+							MessageFormat.format(messages.getString("arg.invalid"), arg)
+							);
 				}
 			}else {
 				if(!isArgument(arg, argMap)) {
 					field = getAnnotatedField(argMap.get(alias), command);
 					if(field != null) {
 						field.setAccessible(true);
-						parseValue(argMap.get(alias), field, arg, command);
+						parseValue(argMap.get(alias), field, arg, command, messages);
 						lookArg = true;
 						alias = null;
 					}
 				} else {
-					throw new IllegalArgumentException(
-							String.format(Messages.ARG_REQUIRED.getText(), alias));
+					throw new CLIArgumentException(
+							MessageFormat.format(messages.getString("arg.required"), alias)
+							);
 				}
 			}	
 		}
 
 	}
 	
-	private static <T extends Command<?>> void parseValue(CLIArgument arg, Field field, String value, T command) 
+	private static <T extends Command<?>> void parseValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException {
 		if(!field.isAccessible()) {
 			field.setAccessible(true);
 		}		
 		if(field.isAnnotationPresent(CLIDatatypeConverter.class)){
 			CLIDatatypeConverter converter = field.getAnnotation(CLIDatatypeConverter.class);
-			parseCustomValue(arg, converter, field, value, command);
+			parseCustomValue(arg, converter, field, value, command, messages);
         }else {
-        	parsePrimitiveValue(arg, field, value, command);
+        	parsePrimitiveValue(arg, field, value, command, messages);
         }
 	}
 	
-	private static <T extends Command<?>> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command) 
+	private static <T extends Command<?>> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException{
 		try {
 			Class<? extends DatatypeConverter<?>> converterClass = converter.value();
@@ -287,11 +281,13 @@ public class CommandFactory {
 			field.set(command, converterClass.cast(converterImpl).parse(value));
 		} catch (DatatypeConverterException e) {
 			throw new CLIArgumentException(
-					String.format(Messages.VALUE_CONV_ERROR.getText(), arg.name(), value), e);
+					MessageFormat.format(messages.getString("arg.conversion.error"), arg.name(), value),
+					e
+					);
 		}
 	}
 	
-	private static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command) 
+	private static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException {
 		
 		if(String.class.equals(field.getType())) {
@@ -337,13 +333,15 @@ public class CommandFactory {
 			}
 		} catch (NumberFormatException e) {
 			throw new CLIArgumentException(
-					String.format(Messages.NUM_ARG_NOT_VALID.getText(), arg.name(), value, field.getType().getName()), e);
+					MessageFormat.format(messages.getString("arg.number.invalid"), value, arg.name(), field.getType().getName()),
+					e
+					);
 		}
 
 		
 	}
 	
-	private static <T extends Command<?>> void verify(T command) 
+	private static <T extends Command<?>> void verify(T command, ResourceBundle messages) 
 			throws CLIArgumentException, IllegalAccessException, InstantiationException {
 		
 		//Validating fields
@@ -355,19 +353,20 @@ public class CommandFactory {
 				
 				if(value == null) {
 					if(!arg.required()) {
-						parseValue(arg, f, arg.value() , command);
+						parseValue(arg, f, arg.value() , command, messages);
 					}else {
 						throw new CLIArgumentException(
-								String.format(Messages.ARG_REQUIRED.getText(), arg.name()));
+								MessageFormat.format(messages.getString("arg.required"), arg.name())
+								);
 					}
 				}else {
 					if(value instanceof String && 
 						((String) value).length() == 0 && 
 						arg.required())
 					{
-						
-							throw new CLIArgumentException(
-									String.format(Messages.ARG_REQUIRED.getText(), arg.name()));
+						throw new CLIArgumentException(
+								MessageFormat.format(messages.getString("arg.required"), arg.name())
+								);
 						
 					}
 				}
@@ -378,19 +377,17 @@ public class CommandFactory {
 	private static <T extends Command<?>> void readCommandProps(T command) 
 		throws NoSuchFieldException, IllegalAccessException{
 		
-		if(command.getClass().isAnnotationPresent(CLICommand.class)) {
-			CLICommand props = command.getClass().getAnnotation(CLICommand.class);
-			Field sfield = null;
-			if(command instanceof Command) {
-				
-				sfield = Command.class.getDeclaredField(Messages.PROP_NAME.getText());
-				sfield.setAccessible(true);
-				sfield.set(command, props.value());
-				
-				sfield = Command.class.getDeclaredField(Messages.PROP_DESCRIPTION.getText());
-				sfield.setAccessible(true);
-				sfield.set(command, props.description());
-			}
+		CLICommand props = command.getClass().getAnnotation(CLICommand.class);
+		Field sfield = null;
+		if(command instanceof Command) {
+			
+			sfield = Command.class.getDeclaredField("name");
+			sfield.setAccessible(true);
+			sfield.set(command, props.value());
+			
+			sfield = Command.class.getDeclaredField("description");
+			sfield.setAccessible(true);
+			sfield.set(command, props.description());
 		}
 
 	}
