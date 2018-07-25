@@ -11,8 +11,9 @@ package net.apercova.quickcli;
 public interface Executable<T> {
 	
 	/**
-	 * Run execution
-	 * @throws Exception if an exception occurs
+	 * Run execution.
+	 * @return T execution result.
+	 * @throws ExecutionException if an exception occurs.
 	 */
 	public T execute() throws ExecutionException;
 	

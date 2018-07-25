@@ -23,19 +23,21 @@ public abstract class Command<T> implements Executable<T>{
 	
 	/**
 	 * Retrieve command's name.
+	 * @return command's name.
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
 	 * Retrieve command's description.
+	 *@return command's description.
 	 */
 	public String getDescription() {
 		return description;
 	}
 	/**
-	 * Set provided {@link Writer} as the underlying {@link PrintWriter}
-	 * @param writer out writer
+	 * Set provided {@link Writer} as the underlying {@link PrintWriter}.
+	 * @param writer out writer.
 	 */
 	public void setWriter(Writer writer) {
 		this.writer =  ((writer != null) 
@@ -46,19 +48,22 @@ public abstract class Command<T> implements Executable<T>{
 				: new PrintWriter(System.out, true));
 	}
 	/**
-	 * Retrieve underlying {@link PrintStream}
+	 * Retrieve underlying {@link PrintStream}.
+	 * @return underlying {@link PrintStream}.
 	 */
 	public PrintWriter getWriter() {
 		return writer;
 	}
 	/**
-	 * Set provided {@link Locale} as the underlying {@link Locale}
+	 * Set provided {@link Locale} as the underlying {@link Locale}.
+	 * @param locale a {@link Locale}.
 	 */
 	public void setLocale(Locale locale) {
 		this.locale = locale == null ? Locale.getDefault() : locale;
 	}
 	/**
-	 * retrieve underlying {@link Locale}
+	 * retrieve underlying {@link Locale}.
+	 * @return underlying {@link Locale}.
 	 */
 	public Locale getLocale() {
 		return locale;
