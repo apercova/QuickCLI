@@ -39,8 +39,8 @@
                 <version>3.7.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -61,7 +61,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <javadocVersion>1.8</javadocVersion>
+                    <javadocVersion>1.7</javadocVersion>
                     <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>
