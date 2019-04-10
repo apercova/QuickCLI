@@ -1,15 +1,15 @@
-package net.apercova.quickcli.command;
+package io.apercova.quickcli.command;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import io.apercova.quickcli.CLIArgument;
-import io.apercova.quickcli.CLICommand;
-import io.apercova.quickcli.CLIDatatypeConverter;
+import io.apercova.quickcli.annotation.CLIArgument;
+import io.apercova.quickcli.annotation.CLICommand;
+import io.apercova.quickcli.annotation.CLIDatatypeConverter;
 import io.apercova.quickcli.Command;
-import io.apercova.quickcli.ExecutionException;
+import io.apercova.quickcli.exception.ExecutionException;
 import net.apercova.quickcli.examples.converter.SimpleCharsetConverter;
 
 /**

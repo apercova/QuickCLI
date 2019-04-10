@@ -1,5 +1,7 @@
 package io.apercova.quickcli;
 
+import io.apercova.quickcli.exception.DatatypeConverterException;
+
 /**
  * Datatype converter.
  * @param <T> Conversion destination type.

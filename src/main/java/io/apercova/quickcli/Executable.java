@@ -1,5 +1,7 @@
 package io.apercova.quickcli;
 
+import io.apercova.quickcli.exception.ExecutionException;
+
 /**
  * Executable object.
  * Represents an executable object.
