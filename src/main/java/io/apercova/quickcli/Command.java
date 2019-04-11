@@ -12,6 +12,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * DefaultCommand base command.
@@ -19,11 +21,17 @@ import java.util.Locale;
  * @author
  * <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a>
  * <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
+ * @param <T> Command result type
  * @since 1.0
  *
  */
 public abstract class Command<T> implements Executable<T>, Closeable {
 
+    /**
+     * Command logger
+     */
+    protected static final Logger LOGGER = Logger.getLogger(Command.class.getName());
+    
     /**
      * Command name.
      */
@@ -41,6 +49,9 @@ public abstract class Command<T> implements Executable<T>, Closeable {
      */
     protected PrintWriter writer;
 
+    public Command() {
+    }
+    
     /**
      * Retrieve command's name.
      *
@@ -152,11 +163,9 @@ public abstract class Command<T> implements Executable<T>, Closeable {
                     sb.append(String.format(", %s=%s", f.getName(), f.get(this)));
                 }
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                continue;
+                LOGGER.log(Level.FINER, e.getMessage(), e);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                continue;
+                LOGGER.log(Level.FINER, e.getMessage(), e);
             }
         }
         sb.append("]");
