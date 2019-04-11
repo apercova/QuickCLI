@@ -8,13 +8,16 @@ import java.lang.annotation.Target;
 
 /**
  * Datatype converter annotation.
- * 
- * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
+ *
+ * @author
+ * <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a>
+ * <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  * @since 1.0
  *
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CLIDatatypeConverter {
-	Class<? extends DatatypeConverter<?>> value();
+
+    Class<? extends DatatypeConverter<?>> value();
 }

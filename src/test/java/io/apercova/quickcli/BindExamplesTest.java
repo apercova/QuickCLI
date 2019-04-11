@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.apercova.quickcli.CommandFactory;
-import net.apercova.quickcli.command.BindExamples;
+import io.apercova.quickcli.command.BindExamples;
 
 public class BindExamplesTest {
 	String[] args;

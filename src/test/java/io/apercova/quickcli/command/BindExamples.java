@@ -10,7 +10,7 @@ import io.apercova.quickcli.annotation.CLICommand;
 import io.apercova.quickcli.annotation.CLIDatatypeConverter;
 import io.apercova.quickcli.Command;
 import io.apercova.quickcli.exception.ExecutionException;
-import net.apercova.quickcli.examples.converter.SimpleCharsetConverter;
+import io.apercova.quickcli.examples.converter.SimpleCharsetConverter;
 
 /**
  * Example of command value binding.
