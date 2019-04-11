@@ -13,143 +13,145 @@ import io.apercova.quickcli.exception.ExecutionException;
 import io.apercova.quickcli.examples.converter.SimpleCharsetConverter;
 
 /**
- * Example of command value binding.
- * Primitive types, {@link String}, {@link BigDecimal} and {@link BigInteger} are supported
- * by default.
- * 
- * @author <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a> <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
+ * Example of command value binding. Primitive types,
+ * {@link String}, {@link BigDecimal} and {@link BigInteger} are supported by
+ * default.
+ *
+ * @author
+ * <a href="https://twitter.com/apercova" target="_blank">{@literal @}apercova</a>
+ * <a href="https://github.com/apercova" target="_blank">https://github.com/apercova</a>
  *
  */
 @CLICommand("bind-ex")
 public class BindExamples extends Command<Void> {
-			
-	@CLIArgument(name="--texto",aliases={"--string"}, required=true)
-	private String texto;
-	@CLIArgument(name="--bits",aliases={"--byte"}, required=true)
-	private byte bits;
-	@CLIArgument(name="--corto",aliases={"--short"}, required=true)
-	private short corto;
-	@CLIArgument(name="--booleano",aliases={"--boolean"}, value="true")
-	private boolean booleano;
-	@CLIArgument(name="--entero",aliases={"--int"}, value="-1")
-	private int entero;
-	@CLIArgument(name="--largo",aliases={"--long"}, required=true)
-	private long largo;
-	@CLIArgument(name="--flotante",aliases={"--float"}, required=true)
-	private float flotante;
-	@CLIArgument(name="--doble",aliases={"--double"}, required=true)
-	private double doble;
-	@CLIArgument(name="--bint",aliases={"--big-integer"}, required=true)
-	private BigInteger bint;
-	@CLIArgument(name="--bdec",aliases={"--big-decimal"}, required=true)
-	private BigDecimal bdec;
-	
-	@CLIArgument(name="--cs",aliases={"--charset"}, required=false, value="utf-8")
-	@CLIDatatypeConverter(SimpleCharsetConverter.class)
-	private Charset cs;
-	
-	@CLIArgument(name="--help", usage="List available options" )
-	private Boolean showHelp;
 
-	public String getTexto() {
-		return texto;
-	}
+    @CLIArgument(name = "--texto", aliases = {"--string"}, required = true)
+    private String texto;
+    @CLIArgument(name = "--bits", aliases = {"--byte"}, required = true)
+    private byte bits;
+    @CLIArgument(name = "--corto", aliases = {"--short"}, required = true)
+    private short corto;
+    @CLIArgument(name = "--booleano", aliases = {"--boolean"}, value = "true")
+    private boolean booleano;
+    @CLIArgument(name = "--entero", aliases = {"--int"}, value = "-1")
+    private int entero;
+    @CLIArgument(name = "--largo", aliases = {"--long"}, required = true)
+    private long largo;
+    @CLIArgument(name = "--flotante", aliases = {"--float"}, required = true)
+    private float flotante;
+    @CLIArgument(name = "--doble", aliases = {"--double"}, required = true)
+    private double doble;
+    @CLIArgument(name = "--bint", aliases = {"--big-integer"}, required = true)
+    private BigInteger bint;
+    @CLIArgument(name = "--bdec", aliases = {"--big-decimal"}, required = true)
+    private BigDecimal bdec;
 
-	public void setTexto(String texto) {
-		this.texto = texto;
-	}
+    @CLIArgument(name = "--cs", aliases = {"--charset"}, required = false, value = "utf-8")
+    @CLIDatatypeConverter(SimpleCharsetConverter.class)
+    private Charset cs;
 
-	public byte getBits() {
-		return bits;
-	}
+    @CLIArgument(name = "--help", usage = "List available options")
+    private Boolean showHelp;
 
-	public void setBits(byte bits) {
-		this.bits = bits;
-	}
+    public String getTexto() {
+        return texto;
+    }
 
-	public short getCorto() {
-		return corto;
-	}
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
 
-	public void setCorto(short corto) {
-		this.corto = corto;
-	}
+    public byte getBits() {
+        return bits;
+    }
 
-	public boolean isBooleano() {
-		return booleano;
-	}
+    public void setBits(byte bits) {
+        this.bits = bits;
+    }
 
-	public void setBooleano(boolean booleano) {
-		this.booleano = booleano;
-	}
+    public short getCorto() {
+        return corto;
+    }
 
-	public int getEntero() {
-		return entero;
-	}
+    public void setCorto(short corto) {
+        this.corto = corto;
+    }
 
-	public void setEntero(int entero) {
-		this.entero = entero;
-	}
+    public boolean isBooleano() {
+        return booleano;
+    }
 
-	public long getLargo() {
-		return largo;
-	}
+    public void setBooleano(boolean booleano) {
+        this.booleano = booleano;
+    }
 
-	public void setLargo(long largo) {
-		this.largo = largo;
-	}
+    public int getEntero() {
+        return entero;
+    }
 
-	public float getFlotante() {
-		return flotante;
-	}
+    public void setEntero(int entero) {
+        this.entero = entero;
+    }
 
-	public void setFlotante(float flotante) {
-		this.flotante = flotante;
-	}
+    public long getLargo() {
+        return largo;
+    }
 
-	public double getDoble() {
-		return doble;
-	}
+    public void setLargo(long largo) {
+        this.largo = largo;
+    }
 
-	public void setDoble(double doble) {
-		this.doble = doble;
-	}
+    public float getFlotante() {
+        return flotante;
+    }
 
-	public BigInteger getBint() {
-		return bint;
-	}
+    public void setFlotante(float flotante) {
+        this.flotante = flotante;
+    }
 
-	public void setBint(BigInteger bint) {
-		this.bint = bint;
-	}
+    public double getDoble() {
+        return doble;
+    }
 
-	public BigDecimal getBdec() {
-		return bdec;
-	}
+    public void setDoble(double doble) {
+        this.doble = doble;
+    }
 
-	public void setBdec(BigDecimal bdec) {
-		this.bdec = bdec;
-	}
-	
-	@Override
-	public Locale getLocale() {
-		return locale;
-	}
-	
-	public Charset getCharset() {
-		return cs;
-	}
+    public BigInteger getBint() {
+        return bint;
+    }
 
-	@Override
-	public String toString() {
-		return "BindExamples [texto=" + texto + ", bits=" + bits + ", corto=" + corto + ", booleano=" + booleano
-				+ ", entero=" + entero + ", largo=" + largo + ", flotante=" + flotante + ", doble=" + doble + ", bint="
-				+ bint + ", bdec=" + bdec + "]";
-	}
+    public void setBint(BigInteger bint) {
+        this.bint = bint;
+    }
 
-	public Void execute() throws ExecutionException {
-		System.out.print("Successfully executed");
-		return null;
-	}
-	
+    public BigDecimal getBdec() {
+        return bdec;
+    }
+
+    public void setBdec(BigDecimal bdec) {
+        this.bdec = bdec;
+    }
+
+    @Override
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public Charset getCharset() {
+        return cs;
+    }
+
+    @Override
+    public String toString() {
+        return "BindExamples [texto=" + texto + ", bits=" + bits + ", corto=" + corto + ", booleano=" + booleano
+                + ", entero=" + entero + ", largo=" + largo + ", flotante=" + flotante + ", doble=" + doble + ", bint="
+                + bint + ", bdec=" + bdec + "]";
+    }
+
+    public Void execute() throws ExecutionException {
+        System.out.print("Successfully executed");
+        return null;
+    }
+
 }
