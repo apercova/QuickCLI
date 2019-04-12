@@ -143,7 +143,7 @@ public abstract class Command<T> implements Executable<T>, Closeable {
      * implements command execution.Prints command usage as default
      * implementation.
      *
-     * @throws io.apercova.quickcli.exception.ExecutionException
+     * @throws ExecutionException If an error raised when executing command.
      */
     public T execute() throws ExecutionException {
         this.printUsage();
