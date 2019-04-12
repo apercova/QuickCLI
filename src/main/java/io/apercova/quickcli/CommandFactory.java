@@ -5,6 +5,7 @@ import io.apercova.quickcli.annotation.CLICommand;
 import io.apercova.quickcli.annotation.CLIDatatypeConverter;
 import io.apercova.quickcli.exception.CLIArgumentException;
 import io.apercova.quickcli.exception.DatatypeConverterException;
+import io.apercova.quickcli.exception.ReflectiveOperationException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Factory for {@link Command } creation.
@@ -169,7 +172,7 @@ public final class CommandFactory {
 
         try {
             if (clazz.isAnnotationPresent(CLICommand.class)) {
-                T command = clazz.getDeclaredConstructor().newInstance();
+                T command = clazz.newInstance();
                 command.setLocale(locale);
                 command.setWriter(writer);
 
@@ -179,15 +182,18 @@ public final class CommandFactory {
                 }
                 return command;
             } else {
-                throw new CLIArgumentException(
-                        MessageFormat.format(messages.getString("type.invalid"), clazz.getName())
-                );
+                throw new CLIArgumentException(MessageFormat.format(messages.getString("type.invalid"), clazz.getName()));
             }
-        } catch (ReflectiveOperationException e) {
-            throw new CLIArgumentException(
-                    MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
-                    e
-            );
+        } catch (ReflectiveOperationException ex) {
+            throw new CLIArgumentException(MessageFormat.format(messages.getString("type.invalid"), clazz.getName()), ex);
+        } catch (InstantiationException ex) {
+            Throwable cause = new ReflectiveOperationException(ex);
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.SEVERE, ex.getMessage(), cause);
+            throw new CLIArgumentException(MessageFormat.format(messages.getString("type.invalid"), clazz.getName()), cause);
+        } catch (IllegalAccessException ex) {
+            Throwable cause = new ReflectiveOperationException(ex);
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.SEVERE, ex.getMessage(), cause);
+            throw new CLIArgumentException(MessageFormat.format(messages.getString("type.invalid"), clazz.getName()), cause);
         }
     }
 
@@ -204,71 +210,76 @@ public final class CommandFactory {
     private static <T extends Command<?>> void read(T command, String[] args, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
 
-        //Command properties
-        readCommandProps(command);
-
-        //CLI Arguments
-        List<String> argSet = new ArrayList<String>(Arrays.asList(args));
-
-        //Declared argument map
-        Map<String, CLIArgument> argMap = getDeclaredArgs(command);
-
-        String alias = null;
-        boolean lookArg = true;
-        for (int i = 0; i < argSet.size(); i++) {
-
-            String arg = argSet.get(i);
-            if (lookArg) {
-                if (isArgument(arg, argMap)) {
-                    lookArg = false;
-                    alias = arg;
-                    Field field = getAnnotatedField(argMap.get(arg), command);
-                    if (field != null) {
-                        field.setAccessible(true);
-                        if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
-                            parseValue(argMap.get(arg), field, String.valueOf(Boolean.TRUE), command, messages);
-                            lookArg = true;
-                            alias = null;
-
-                        } else if (!argMap.get(arg).required()) {
-                            if ((i + 1) < argSet.size() && !isArgument(argSet.get((i + 1)), argMap)) {
-                                parseValue(argMap.get(arg), field, argSet.get((i + 1)), command, messages);
-                                i++;
-
+        try {
+            //Command properties
+            readCommandProps(command);
+            
+            //CLI Arguments
+            List<String> argSet = new ArrayList<String>(Arrays.asList(args));
+            
+            //Declared argument map
+            Map<String, CLIArgument> argMap = getDeclaredArgs(command);
+            
+            String alias = null;
+            boolean lookArg = true;
+            for (int i = 0; i < argSet.size(); i++) {
+                
+                String arg = argSet.get(i);
+                if (lookArg) {
+                    if (isArgument(arg, argMap)) {
+                        lookArg = false;
+                        alias = arg;
+                        Field field = getAnnotatedField(argMap.get(arg), command);
+                        if (field != null) {
+                            field.setAccessible(true);
+                            if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
+                                parseValue(argMap.get(arg), field, String.valueOf(Boolean.TRUE), command, messages);
+                                lookArg = true;
+                                alias = null;
+                                
+                            } else if (!argMap.get(arg).required()) {
+                                if ((i + 1) < argSet.size() && !isArgument(argSet.get((i + 1)), argMap)) {
+                                    parseValue(argMap.get(arg), field, argSet.get((i + 1)), command, messages);
+                                    i++;
+                                    
+                                } else {
+                                    parseValue(argMap.get(arg), field, argMap.get(arg).value(), command, messages);
+                                    
+                                }
+                                lookArg = true;
+                                alias = null;
                             } else {
-                                parseValue(argMap.get(arg), field, argMap.get(arg).value(), command, messages);
-
-                            }
-                            lookArg = true;
-                            alias = null;
-                        } else {
-                            if ((i + 1) >= argSet.size()) {
-                                throw new CLIArgumentException(
-                                        MessageFormat.format(messages.getString("arg.required"), alias)
-                                );
+                                if ((i + 1) >= argSet.size()) {
+                                    throw new CLIArgumentException(
+                                            MessageFormat.format(messages.getString("arg.required"), alias)
+                                    );
+                                }
                             }
                         }
+                    } else {
+                        throw new CLIArgumentException(
+                                MessageFormat.format(messages.getString("arg.invalid"), arg)
+                        );
                     }
                 } else {
-                    throw new CLIArgumentException(
-                            MessageFormat.format(messages.getString("arg.invalid"), arg)
-                    );
-                }
-            } else {
-                if (!isArgument(arg, argMap)) {
-                    Field field = getAnnotatedField(argMap.get(alias), command);
-                    if (field != null) {
-                        field.setAccessible(true);
-                        parseValue(argMap.get(alias), field, arg, command, messages);
-                        lookArg = true;
-                        alias = null;
+                    if (!isArgument(arg, argMap)) {
+                        Field field = getAnnotatedField(argMap.get(alias), command);
+                        if (field != null) {
+                            field.setAccessible(true);
+                            parseValue(argMap.get(alias), field, arg, command, messages);
+                            lookArg = true;
+                            alias = null;
+                        }
+                    } else {
+                        throw new CLIArgumentException(
+                                MessageFormat.format(messages.getString("arg.required"), alias)
+                        );
                     }
-                } else {
-                    throw new CLIArgumentException(
-                            MessageFormat.format(messages.getString("arg.required"), alias)
-                    );
                 }
             }
+        } catch (NoSuchFieldException ex) {
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+            throw new ReflectiveOperationException(ex);
         }
 
     }
@@ -287,27 +298,35 @@ public final class CommandFactory {
         //Validating fields
         for (Field f : command.getClass().getDeclaredFields()) {
             if (f.isAnnotationPresent(CLIArgument.class)) {
-                f.setAccessible(true);
-                Object value = f.get(command);
-                CLIArgument arg = f.getAnnotation(CLIArgument.class);
-
-                if (value == null) {
-                    if (!arg.required()) {
-                        parseValue(arg, f, arg.value(), command, messages);
+                try {
+                    f.setAccessible(true);
+                    Object value = f.get(command);
+                    CLIArgument arg = f.getAnnotation(CLIArgument.class);
+                    
+                    if (value == null) {
+                        if (!arg.required()) {
+                            parseValue(arg, f, arg.value(), command, messages);
+                        } else {
+                            throw new CLIArgumentException(
+                                    MessageFormat.format(messages.getString("arg.required"), arg.name())
+                            );
+                        }
                     } else {
-                        throw new CLIArgumentException(
-                                MessageFormat.format(messages.getString("arg.required"), arg.name())
-                        );
+                        if (value instanceof String
+                                && ((String) value).length() == 0
+                                && arg.required()) {
+                            throw new CLIArgumentException(
+                                    MessageFormat.format(messages.getString("arg.required"), arg.name())
+                            );
+                            
+                        }
                     }
-                } else {
-                    if (value instanceof String
-                            && ((String) value).length() == 0
-                            && arg.required()) {
-                        throw new CLIArgumentException(
-                                MessageFormat.format(messages.getString("arg.required"), arg.name())
-                        );
-
-                    }
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+                    throw new ReflectiveOperationException(ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+                    throw new ReflectiveOperationException(ex);
                 }
             }
         }
@@ -354,13 +373,22 @@ public final class CommandFactory {
 
         try {
             Class<? extends DatatypeConverter<?>> converterClass = converter.value();
-            Object converterImpl = converterClass.getDeclaredConstructor().newInstance();
+            Object converterImpl = converterClass.newInstance();
             field.set(command, converterClass.cast(converterImpl).parse(value));
         } catch (DatatypeConverterException e) {
             throw new CLIArgumentException(
                     MessageFormat.format(messages.getString("arg.conversion.error"), arg.name(), value),
                     e
             );
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+            throw new ReflectiveOperationException(ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+            throw new ReflectiveOperationException(ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+            throw new ReflectiveOperationException(ex);
         }
 
     }
@@ -379,54 +407,62 @@ public final class CommandFactory {
     private static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
 
-        if (String.class.equals(field.getType())) {
-            field.set(command, value);
-        }
-
-        if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
-            field.set(command, Boolean.valueOf(value));
-        }
-
         try {
-
-            if (byte.class.equals(field.getType()) || Byte.class.equals(field.getType())) {
-                field.set(command, Byte.valueOf(value));
+            if (String.class.equals(field.getType())) {
+                field.set(command, value);
             }
 
-            if (short.class.equals(field.getType()) || Short.class.equals(field.getType())) {
-                field.set(command, Short.valueOf(value));
+            if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
+                field.set(command, Boolean.valueOf(value));
             }
+            
+            try {
 
-            if (int.class.equals(field.getType()) || Integer.class.equals(field.getType())) {
-                field.set(command, Integer.valueOf(value));
-            }
+                if (byte.class.equals(field.getType()) || Byte.class.equals(field.getType())) {
+                    field.set(command, Byte.valueOf(value));
+                }
 
-            if (long.class.equals(field.getType()) || Long.class.equals(field.getType())) {
-                field.set(command, Long.valueOf(value));
-            }
+                if (short.class.equals(field.getType()) || Short.class.equals(field.getType())) {
+                    field.set(command, Short.valueOf(value));
+                }
 
-            if (float.class.equals(field.getType()) || Float.class.equals(field.getType())) {
-                field.set(command, Float.valueOf(value));
-            }
+                if (int.class.equals(field.getType()) || Integer.class.equals(field.getType())) {
+                    field.set(command, Integer.valueOf(value));
+                }
 
-            if (double.class.equals(field.getType()) || Double.class.equals(field.getType())) {
-                field.set(command, Double.valueOf(value));
-            }
+                if (long.class.equals(field.getType()) || Long.class.equals(field.getType())) {
+                    field.set(command, Long.valueOf(value));
+                }
 
-            if (BigInteger.class.equals(field.getType())) {
-                field.set(command, new BigInteger(value));
-            }
+                if (float.class.equals(field.getType()) || Float.class.equals(field.getType())) {
+                    field.set(command, Float.valueOf(value));
+                }
 
-            if (BigDecimal.class.equals(field.getType())) {
-                field.set(command, new BigDecimal(value));
-            }
-        } catch (NumberFormatException e) {
-            throw new CLIArgumentException(
+                if (double.class.equals(field.getType()) || Double.class.equals(field.getType())) {
+                    field.set(command, Double.valueOf(value));
+                }
+
+                if (BigInteger.class.equals(field.getType())) {
+                    field.set(command, new BigInteger(value));
+                }
+
+                if (BigDecimal.class.equals(field.getType())) {
+                    field.set(command, new BigDecimal(value));
+                }
+            } catch (NumberFormatException e) {
+                throw new CLIArgumentException(
                     MessageFormat.format(messages.getString("arg.number.invalid"), value, arg.name(), field.getType().getName()),
                     e
-            );
+                );
+            }
+            
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+            throw new ReflectiveOperationException(ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+            throw new ReflectiveOperationException(ex);
         }
-
     }
 
     /**
@@ -441,13 +477,21 @@ public final class CommandFactory {
 
         CLICommand props = command.getClass().getAnnotation(CLICommand.class);
         if (command instanceof Command) {
-            Field sfield = Command.class.getDeclaredField("name");
-            sfield.setAccessible(true);
-            sfield.set(command, props.value());
-
-            sfield = Command.class.getDeclaredField("description");
-            sfield.setAccessible(true);
-            sfield.set(command, props.description());
+            try {
+                Field sfield = Command.class.getDeclaredField("name");
+                sfield.setAccessible(true);
+                sfield.set(command, props.value());
+                
+                sfield = Command.class.getDeclaredField("description");
+                sfield.setAccessible(true);
+                sfield.set(command, props.description());
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+                throw new ReflectiveOperationException(ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(CommandFactory.class.getName()).log(Level.FINE, ex.getMessage(), ex);
+                throw new ReflectiveOperationException(ex);
+            }
         }
 
     }
