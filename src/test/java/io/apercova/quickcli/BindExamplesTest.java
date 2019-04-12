@@ -1,4 +1,4 @@
-package net.apercova.quickcli;
+package io.apercova.quickcli;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +11,6 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.apercova.quickcli.CommandFactory;
 import io.apercova.quickcli.command.BindExamples;
 
 public class BindExamplesTest {
@@ -38,15 +37,15 @@ public class BindExamplesTest {
 
     @Test
     public void test() throws Exception {
-        BindExamples command = CommandFactory.createCommand(args, BindExamples.class, new Locale("es"));
+        BindExamples command = CommandFactory.create(args, BindExamples.class, new Locale("es"));
         assertTrue(command != null);
 
         assertEquals(Byte.MAX_VALUE, command.getBits());
         assertEquals(Short.MAX_VALUE, command.getCorto());
         assertEquals(Integer.MAX_VALUE, command.getEntero());
         assertEquals(Long.MAX_VALUE, command.getLargo());
-        assertTrue(new Float(Float.MAX_VALUE).equals(command.getFlotante()));
-        assertTrue(new Double(Double.MAX_VALUE).equals(command.getDoble()));
+        assertTrue(Float.valueOf(Float.MAX_VALUE).equals(command.getFlotante()));
+        assertTrue(Double.valueOf(Double.MAX_VALUE).equals(command.getDoble()));
         assertEquals(new BigInteger((Long.MAX_VALUE + Long.MAX_VALUE) + ""), command.getBint());
         assertEquals(new BigDecimal((Long.MAX_VALUE * 1.23) + ""), command.getBdec());
 

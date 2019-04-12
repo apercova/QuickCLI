@@ -33,7 +33,7 @@ import java.util.ResourceBundle;
  */
 public final class CommandFactory {
 
-    private static final String MESSAGES_BOUNDLE = "io.apercova.quickcli.i18n.messages";
+    private static final String MESSAGE_BOUNDLE = "io.apercova.quickcli.i18n.messages";
 
     private CommandFactory() {
         super();
@@ -46,11 +46,11 @@ public final class CommandFactory {
      * @param args CLI Arguments.
      * @param clazz Command type class.
      * @return Command {@link Command} instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz)
             throws CLIArgumentException {
-        return createCommand(args, clazz, System.out, Charset.defaultCharset(), Locale.getDefault());
+        return create(args, clazz, System.out, Charset.defaultCharset(), Locale.getDefault());
     }
 
     /**
@@ -63,9 +63,9 @@ public final class CommandFactory {
      * @return Command {@link Command} instance.
      * @throws CLIArgumentException If an error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Locale locale)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, Locale locale)
             throws CLIArgumentException {
-        return createCommand(args, clazz, System.out, Charset.defaultCharset(), locale);
+        return create(args, clazz, System.out, Charset.defaultCharset(), locale);
     }
 
     /**
@@ -76,11 +76,11 @@ public final class CommandFactory {
      * @param clazz Command type class.
      * @param out Output stream.
      * @return Command {@link Command} instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, OutputStream out)
             throws CLIArgumentException {
-        return createCommand(args, clazz, out, Charset.defaultCharset(), Locale.getDefault());
+        return create(args, clazz, out, Charset.defaultCharset(), Locale.getDefault());
     }
 
     /**
@@ -92,11 +92,11 @@ public final class CommandFactory {
      * @param out Output stream.
      * @param locale Output locale.
      * @return Command {@link Command} instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Locale locale)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, OutputStream out, Locale locale)
             throws CLIArgumentException {
-        return createCommand(args, clazz, out, Charset.defaultCharset(), locale);
+        return create(args, clazz, out, Charset.defaultCharset(), locale);
     }
 
     /**
@@ -108,11 +108,11 @@ public final class CommandFactory {
      * @param out Output stream.
      * @param cs Output character set.
      * @return Command {@link Command} instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, OutputStream out, Charset cs)
             throws CLIArgumentException {
-        return createCommand(args, clazz, out, cs, Locale.getDefault());
+        return create(args, clazz, out, cs, Locale.getDefault());
     }
 
     /**
@@ -125,15 +125,15 @@ public final class CommandFactory {
      * @param cs Output character set.
      * @param locale Output locale.
      * @return Command {@link Command} instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, OutputStream out, Charset cs, Locale locale)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, OutputStream out, Charset cs, Locale locale)
             throws CLIArgumentException {
         Writer writer = new OutputStreamWriter(
                 (out != null ? out : System.out),
                 (cs != null ? cs : Charset.defaultCharset())
         );
-        return createCommand(args, clazz, writer, locale);
+        return create(args, clazz, writer, locale);
     }
 
     /**
@@ -144,11 +144,11 @@ public final class CommandFactory {
      * @param clazz Command type class.
      * @param writer Output writer.
      * @return Command {@link Command} instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, Writer writer)
             throws CLIArgumentException {
-        return createCommand(args, clazz, writer, Locale.getDefault());
+        return create(args, clazz, writer, Locale.getDefault());
     }
 
     /**
@@ -160,18 +160,16 @@ public final class CommandFactory {
      * @param writer Output writer.
      * @param locale Output locale.
      * @return Command Command instance.
-     * @throws CLIArgumentException If an error occurs at command creation.
+     * @throws CLIArgumentException If any error occurs at command creation.
      */
-    public static <T extends Command<?>> T createCommand(String[] args, Class<T> clazz, Writer writer, Locale locale)
+    public static <T extends Command<?>> T create(String[] args, Class<T> clazz, Writer writer, Locale locale)
             throws CLIArgumentException {
         locale = locale == null ? Locale.getDefault() : locale;
-
-        T command = null;
-        ResourceBundle messages = ResourceBundle.getBundle(MESSAGES_BOUNDLE, locale);
+        ResourceBundle messages = ResourceBundle.getBundle(MESSAGE_BOUNDLE, locale);
 
         try {
             if (clazz.isAnnotationPresent(CLICommand.class)) {
-                command = clazz.newInstance();
+                T command = clazz.getDeclaredConstructor().newInstance();
                 command.setLocale(locale);
                 command.setWriter(writer);
 
@@ -179,29 +177,18 @@ public final class CommandFactory {
                     read(command, args, messages);
                     verify(command, messages);
                 }
+                return command;
             } else {
                 throw new CLIArgumentException(
                         MessageFormat.format(messages.getString("type.invalid"), clazz.getName())
                 );
             }
-        } catch (IllegalAccessException e) {
-            throw new CLIArgumentException(
-                    MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
-                    e
-            );
-        } catch (NoSuchFieldException e) {
-            throw new CLIArgumentException(
-                    MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
-                    e
-            );
-        } catch (InstantiationException e) {
+        } catch (ReflectiveOperationException e) {
             throw new CLIArgumentException(
                     MessageFormat.format(messages.getString("type.invalid"), clazz.getName()),
                     e
             );
         }
-
-        return command;
     }
 
     /**
@@ -212,11 +199,10 @@ public final class CommandFactory {
      * @param messages {@link ResourceBundle} messages.
      * @throws CLIArgumentException
      * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws ReflectiveOperationException
      */
     private static <T extends Command<?>> void read(T command, String[] args, ResourceBundle messages)
-            throws CLIArgumentException, NoSuchFieldException, IllegalAccessException, InstantiationException {
+            throws CLIArgumentException, ReflectiveOperationException {
 
         //Command properties
         readCommandProps(command);
@@ -229,7 +215,6 @@ public final class CommandFactory {
 
         String alias = null;
         boolean lookArg = true;
-        Field field = null;
         for (int i = 0; i < argSet.size(); i++) {
 
             String arg = argSet.get(i);
@@ -237,7 +222,7 @@ public final class CommandFactory {
                 if (isArgument(arg, argMap)) {
                     lookArg = false;
                     alias = arg;
-                    field = getAnnotatedField(argMap.get(arg), command);
+                    Field field = getAnnotatedField(argMap.get(arg), command);
                     if (field != null) {
                         field.setAccessible(true);
                         if (boolean.class.equals(field.getType()) || Boolean.class.equals(field.getType())) {
@@ -271,7 +256,7 @@ public final class CommandFactory {
                 }
             } else {
                 if (!isArgument(arg, argMap)) {
-                    field = getAnnotatedField(argMap.get(alias), command);
+                    Field field = getAnnotatedField(argMap.get(alias), command);
                     if (field != null) {
                         field.setAccessible(true);
                         parseValue(argMap.get(alias), field, arg, command, messages);
@@ -294,11 +279,10 @@ public final class CommandFactory {
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
      * @throws CLIArgumentException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws ReflectiveOperationException
      */
     private static <T extends Command<?>> void verify(T command, ResourceBundle messages)
-            throws CLIArgumentException, IllegalAccessException, InstantiationException {
+            throws CLIArgumentException, ReflectiveOperationException {
 
         //Validating fields
         for (Field f : command.getClass().getDeclaredFields()) {
@@ -338,11 +322,10 @@ public final class CommandFactory {
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
      * @throws CLIArgumentException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws ReflectiveOperationException
      */
     private static <T extends Command<?>> void parseValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages)
-            throws CLIArgumentException, IllegalAccessException, InstantiationException {
+            throws CLIArgumentException, ReflectiveOperationException {
         if (!field.isAccessible()) {
             field.setAccessible(true);
         }
@@ -364,15 +347,14 @@ public final class CommandFactory {
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
      * @throws CLIArgumentException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws ReflectiveOperationException
      */
     private static <T extends Command<?>> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command, ResourceBundle messages)
-            throws CLIArgumentException, IllegalAccessException, InstantiationException {
+            throws CLIArgumentException, ReflectiveOperationException {
 
         try {
             Class<? extends DatatypeConverter<?>> converterClass = converter.value();
-            Object converterImpl = converterClass.newInstance();
+            Object converterImpl = converterClass.getDeclaredConstructor().newInstance();
             field.set(command, converterClass.cast(converterImpl).parse(value));
         } catch (DatatypeConverterException e) {
             throw new CLIArgumentException(
@@ -392,10 +374,10 @@ public final class CommandFactory {
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
      * @throws CLIArgumentException
-     * @throws IllegalAccessException
+     * @throws ReflectiveOperationException
      */
     private static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages)
-            throws CLIArgumentException, IllegalAccessException {
+            throws CLIArgumentException, ReflectiveOperationException {
 
         if (String.class.equals(field.getType())) {
             field.set(command, value);
@@ -452,16 +434,14 @@ public final class CommandFactory {
      *
      * @param command {@link Command} Instance.
      * @throws NoSuchFieldException
-     * @throws IllegalAccessException
+     * @throws ReflectiveOperationException
      */
     private static <T extends Command<?>> void readCommandProps(T command)
-            throws NoSuchFieldException, IllegalAccessException {
+            throws NoSuchFieldException, ReflectiveOperationException {
 
         CLICommand props = command.getClass().getAnnotation(CLICommand.class);
-        Field sfield = null;
         if (command instanceof Command) {
-
-            sfield = Command.class.getDeclaredField("name");
+            Field sfield = Command.class.getDeclaredField("name");
             sfield.setAccessible(true);
             sfield.set(command, props.value());
 
