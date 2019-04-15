@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.apercova</groupId>
     <artifactId>quickcli</artifactId>
-    <version>1.0.1808</version>
+    <version>1.0.1904</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.7.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <source>1.5</source>
@@ -59,7 +59,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.1</version>
                 <configuration>
                     <javadocVersion>1.5</javadocVersion>
                     <encoding>UTF-8</encoding>

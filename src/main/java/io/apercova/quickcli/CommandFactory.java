@@ -155,6 +155,7 @@ public final class CommandFactory {
      */
     public static <T extends Command<?>> T create(String[] args, Class<T> clazz, Writer writer, Locale locale)
             throws CLIArgumentException {
+        writer = writer == null ? new OutputStreamWriter(System.out, Charset.defaultCharset()): writer;
         locale = locale == null ? Locale.getDefault() : locale;
         ResourceBundle messages = ResourceBundle.getBundle(MESSAGE_BOUNDLE, locale);
 
