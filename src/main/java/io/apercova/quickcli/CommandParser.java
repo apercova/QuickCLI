@@ -40,12 +40,14 @@ public abstract class CommandParser<T extends Command<?>> {
      * @param args Command's arguments.
      * @param messages {@link ResourceBundle} messages.
      * @return Parsed command instance.
-     * @throws CLIArgumentException If an exception occurs when parsing a command.
-     * @throws ReflectiveOperationException If a java reflection-related exception occurs.
+     * @throws CLIArgumentException If an exception occurs when parsing a
+     * command.
+     * @throws ReflectiveOperationException If a java reflection-related
+     * exception occurs.
      */
-    public static <T extends Command<?>> T parse(T command, String[] args, ResourceBundle messages) 
+    public static <T extends Command<?>> T parse(T command, String[] args, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
-        
+
         //Command properties
         readProperties(command);
 
@@ -108,8 +110,7 @@ public abstract class CommandParser<T extends Command<?>> {
         }
 
         return command;
-            
-       
+
     }
 
     /**
@@ -118,8 +119,10 @@ public abstract class CommandParser<T extends Command<?>> {
      * @param <T> Command type.
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
-     * @throws CLIArgumentException If an exception occurs when parsing a command.
-     * @throws ReflectiveOperationException If a java reflection-related exception occurs.
+     * @throws CLIArgumentException If an exception occurs when parsing a
+     * command.
+     * @throws ReflectiveOperationException If a java reflection-related
+     * exception occurs.
      */
     public static <T extends Command<?>> void validate(T command, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
@@ -166,7 +169,8 @@ public abstract class CommandParser<T extends Command<?>> {
      *
      * @param <T> Command type.
      * @param command {@link Command} Instance.
-     * @throws ReflectiveOperationException If a java reflection-related exception occurs.
+     * @throws ReflectiveOperationException If a java reflection-related
+     * exception occurs.
      */
     protected static <T extends Command<?>> void readProperties(T command)
             throws ReflectiveOperationException {
@@ -231,7 +235,7 @@ public abstract class CommandParser<T extends Command<?>> {
      * @param <T> Command type.
      * @param argument {@link CLIArgument} annotation.
      * @param command {@link Command} instance.
-     * @return {@link} Field that has been annotated with {@link CLIArgument}.
+     * @return Field that has been annotated with {@link CLIArgument}.
      */
     protected static <T extends Command<?>> Field getArgumentField(CLIArgument argument, T command) {
         Field field = null;
@@ -256,8 +260,10 @@ public abstract class CommandParser<T extends Command<?>> {
      * @param value Argument value as string.
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
-     * @throws CLIArgumentException If an exception occurs when parsing a command.
-     * @throws ReflectiveOperationException If a java reflection-related exception occurs.
+     * @throws CLIArgumentException If an exception occurs when parsing a
+     * command.
+     * @throws ReflectiveOperationException If a java reflection-related
+     * exception occurs.
      */
     protected static <T extends Command<?>> void parseValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
@@ -281,8 +287,10 @@ public abstract class CommandParser<T extends Command<?>> {
      * @param value Argument value as string.
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
-     * @throws CLIArgumentException If an exception occurs when parsing a command.
-     * @throws ReflectiveOperationException If a java reflection-related exception occurs.
+     * @throws CLIArgumentException If an exception occurs when parsing a
+     * command.
+     * @throws ReflectiveOperationException If a java reflection-related
+     * exception occurs.
      */
     protected static <T extends Command<?>> void parsePrimitiveValue(CLIArgument arg, Field field, String value, T command, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
@@ -350,13 +358,15 @@ public abstract class CommandParser<T extends Command<?>> {
      *
      * @param <T> Command type.
      * @param arg Command argument.
-     * @param converter {@link Field} for storing parsed value.
+     * @param converter Converter for parsed value.
      * @param field {@link Field} for storing parsed value.
      * @param value Argument value as string.
      * @param command {@link Command} instance.
      * @param messages {@link ResourceBundle} messages.
-     * @throws CLIArgumentException If an exception occurs when parsing a command.
-     * @throws ReflectiveOperationException If a java reflection-related exception occurs.
+     * @throws CLIArgumentException If an exception occurs when parsing a
+     * command.
+     * @throws ReflectiveOperationException If a java reflection-related
+     * exception occurs.
      */
     protected static <T extends Command<?>> void parseCustomValue(CLIArgument arg, CLIDatatypeConverter converter, Field field, String value, T command, ResourceBundle messages)
             throws CLIArgumentException, ReflectiveOperationException {
