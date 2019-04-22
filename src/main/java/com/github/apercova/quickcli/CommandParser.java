@@ -1,11 +1,11 @@
-package io.apercova.quickcli;
+package com.github.apercova.quickcli;
 
-import io.apercova.quickcli.annotation.CLIArgument;
-import io.apercova.quickcli.annotation.CLICommand;
-import io.apercova.quickcli.annotation.CLIDatatypeConverter;
-import io.apercova.quickcli.exception.CLIArgumentException;
-import io.apercova.quickcli.exception.DatatypeConverterException;
-import io.apercova.quickcli.exception.ReflectiveOperationException;
+import com.github.apercova.quickcli.annotation.CLIArgument;
+import com.github.apercova.quickcli.annotation.CLICommand;
+import com.github.apercova.quickcli.annotation.CLIDatatypeConverter;
+import com.github.apercova.quickcli.exception.CLIArgumentException;
+import com.github.apercova.quickcli.exception.DatatypeConverterException;
+import com.github.apercova.quickcli.exception.ReflectiveOperationException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;

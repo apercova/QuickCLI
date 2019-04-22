@@ -1,4 +1,4 @@
-package io.apercova.quickcli.exception;
+package com.github.apercova.quickcli.exception;
 
 /**
  * Represents a reflective operation exception that is intended to be thrown as

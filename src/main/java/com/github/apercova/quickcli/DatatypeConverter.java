@@ -1,6 +1,6 @@
-package io.apercova.quickcli;
+package com.github.apercova.quickcli;
 
-import io.apercova.quickcli.exception.DatatypeConverterException;
+import com.github.apercova.quickcli.exception.DatatypeConverterException;
 
 /**
  * Datatype converter.

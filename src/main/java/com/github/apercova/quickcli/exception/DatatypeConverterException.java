@@ -1,4 +1,4 @@
-package io.apercova.quickcli.exception;
+package com.github.apercova.quickcli.exception;
 
 /**
  * Datatype conversion exception.

@@ -1,6 +1,6 @@
-package io.apercova.quickcli;
+package com.github.apercova.quickcli;
 
-import io.apercova.quickcli.exception.ExecutionException;
+import com.github.apercova.quickcli.exception.ExecutionException;
 
 /**
  * Executable object.Represents an executable object.
