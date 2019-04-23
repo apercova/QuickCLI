@@ -1,4 +1,4 @@
-package io.apercova.quickcli;
+package com.github.apercova.quickcli;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +11,7 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.apercova.quickcli.command.BindExamples;
+import com.github.apercova.quickcli.command.BindExamples;
 
 public class BindExamplesTest {
 

@@ -1,8 +1,8 @@
-package io.apercova.quickcli;
+package com.github.apercova.quickcli;
 
-import io.apercova.quickcli.annotation.CLICommand;
-import io.apercova.quickcli.exception.CLIArgumentException;
-import io.apercova.quickcli.exception.ReflectiveOperationException;
+import com.github.apercova.quickcli.annotation.CLICommand;
+import com.github.apercova.quickcli.exception.CLIArgumentException;
+import com.github.apercova.quickcli.exception.ReflectiveOperationException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public final class CommandFactory {
 
-    private static final String MESSAGE_BOUNDLE = "io.apercova.quickcli.i18n.messages";
+    private static final String MESSAGE_BOUNDLE = "com.github.apercova.quickcli.i18n.messages";
 
     private CommandFactory() {
         super();

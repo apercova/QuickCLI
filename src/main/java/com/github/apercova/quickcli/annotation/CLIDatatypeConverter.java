@@ -1,6 +1,6 @@
-package io.apercova.quickcli.annotation;
+package com.github.apercova.quickcli.annotation;
 
-import io.apercova.quickcli.DatatypeConverter;
+import com.github.apercova.quickcli.DatatypeConverter;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

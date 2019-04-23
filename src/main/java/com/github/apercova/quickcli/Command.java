@@ -1,8 +1,8 @@
-package io.apercova.quickcli;
+package com.github.apercova.quickcli;
 
-import io.apercova.quickcli.exception.ExecutionException;
-import io.apercova.quickcli.annotation.CLIArgument;
-import io.apercova.quickcli.annotation.CLICommand;
+import com.github.apercova.quickcli.exception.ExecutionException;
+import com.github.apercova.quickcli.annotation.CLIArgument;
+import com.github.apercova.quickcli.annotation.CLICommand;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintStream;

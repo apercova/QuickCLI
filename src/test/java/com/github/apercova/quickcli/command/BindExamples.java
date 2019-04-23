@@ -1,16 +1,16 @@
-package io.apercova.quickcli.command;
+package com.github.apercova.quickcli.command;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import io.apercova.quickcli.annotation.CLIArgument;
-import io.apercova.quickcli.annotation.CLICommand;
-import io.apercova.quickcli.annotation.CLIDatatypeConverter;
-import io.apercova.quickcli.Command;
-import io.apercova.quickcli.exception.ExecutionException;
-import io.apercova.quickcli.examples.converter.SimpleCharsetConverter;
+import com.github.apercova.quickcli.annotation.CLIArgument;
+import com.github.apercova.quickcli.annotation.CLICommand;
+import com.github.apercova.quickcli.annotation.CLIDatatypeConverter;
+import com.github.apercova.quickcli.Command;
+import com.github.apercova.quickcli.exception.ExecutionException;
+import com.github.apercova.quickcli.examples.converter.SimpleCharsetConverter;
 
 /**
  * Example of command value binding. Primitive types,
