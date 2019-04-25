@@ -5,4 +5,4 @@
 Eficient POJO-based parsing for java CLI arguments
 
 > Check out some examples [here](https://github.com/apercova/QuickCLI-examples)!  
-> Also try [jchecksum](https://github.com/apercova/jchecksum). A QuickCLI command implementation for calculating JVM MessageDigest hashes.
+> Also try [jchecksum](https://github.com/apercova/jchecksum). A QuickCLI command implementation for hashing calculation using JVM MessageDigest.
