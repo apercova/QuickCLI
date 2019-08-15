@@ -1,6 +1,7 @@
 ## QuickCLI
   
 [![Build Status](https://travis-ci.org/apercova/QuickCLI.svg?branch=master)](https://travis-ci.org/apercova/QuickCLI)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.apercova/quickcli.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.apercova%22%20AND%20a:%22quickcli%22)
   
 ### Eficient POJO-based parsing for java CLI arguments
 
